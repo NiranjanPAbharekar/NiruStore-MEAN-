@@ -1,0 +1,854 @@
+<app-navbar></app-navbar>
+<!-- ========================================================= -->
+<!-- PERFUME PAGE -->
+<!-- ========================================================= -->
+
+<div class="min-h-screen bg-[#faf9f6] text-gray-900">
+
+  <!-- ========================================================= -->
+  <!-- HERO SECTION -->
+  <!-- ========================================================= -->
+
+  <section
+    class="relative overflow-hidden bg-[#111111]
+           min-h-[520px] flex items-center"
+  >
+
+    <!-- Background Glow -->
+
+    <div
+      class="absolute -right-32 -top-32
+             w-[500px] h-[500px]
+             rounded-full
+             bg-[#c89b3c]/10
+             blur-3xl"
+    ></div>
+
+    <div
+      class="absolute -left-32 -bottom-32
+             w-[450px] h-[450px]
+             rounded-full
+             bg-[#c89b3c]/5
+             blur-3xl"
+    ></div>
+
+
+    <div
+      class="max-w-7xl mx-auto w-full
+             px-6 lg:px-10 py-20
+             grid lg:grid-cols-2
+             gap-12 items-center
+             relative z-10"
+    >
+
+      <!-- ===================================================== -->
+      <!-- HERO CONTENT -->
+      <!-- ===================================================== -->
+
+      <div>
+
+        <p
+          class="text-[#c89b3c]
+                 uppercase
+                 tracking-[0.35em]
+                 text-sm
+                 font-medium mb-5"
+        >
+          Signature Fragrance
+        </p>
+
+
+        <h1
+          class="text-4xl sm:text-5xl
+                 lg:text-6xl
+                 font-serif
+                 font-semibold
+                 text-white
+                 leading-tight"
+        >
+          A Scent
+          <span class="text-[#c89b3c]">
+            To Remember.
+          </span>
+        </h1>
+
+
+        <p
+          class="text-gray-400
+                 text-base sm:text-lg
+                 mt-6
+                 max-w-xl
+                 leading-relaxed"
+        >
+          Discover exquisite fragrances crafted to express
+          your personality. From fresh and floral to deep
+          and mysterious, find the scent that becomes
+          uniquely yours.
+        </p>
+
+
+        <div class="flex flex-wrap gap-4 mt-8">
+
+          <button
+            class="px-7 py-3
+                   rounded-full
+                   bg-[#c89b3c]
+                   text-black
+                   font-semibold
+                   hover:bg-[#d8ae55]
+                   transition duration-300"
+          >
+            Shop Fragrances
+          </button>
+
+
+          <button
+            class="px-7 py-3
+                   rounded-full
+                   border border-[#c89b3c]/60
+                   text-[#c89b3c]
+                   hover:bg-[#c89b3c]
+                   hover:text-black
+                   transition duration-300"
+          >
+            Explore Collection
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================== -->
+      <!-- HERO PERFUME -->
+      <!-- ===================================================== -->
+
+      <div
+        class="relative
+               flex justify-center
+               lg:justify-end"
+      >
+
+        <div
+          class="absolute
+                 w-[290px] h-[290px]
+                 sm:w-[390px] sm:h-[390px]
+                 rounded-full
+                 border border-[#c89b3c]/20"
+        ></div>
+
+
+        <div
+          class="absolute
+                 w-[230px] h-[230px]
+                 sm:w-[310px] sm:h-[310px]
+                 rounded-full
+                 border border-[#c89b3c]/10"
+        ></div>
+
+
+        <img
+          src="assets/perfume/perfume-hero.png"
+          alt="Luxury Perfume"
+          class="relative z-10
+                 w-[240px]
+                 sm:w-[330px]
+                 lg:w-[390px]
+                 object-contain
+                 drop-shadow-[0_25px_40px_rgba(0,0,0,0.7)]"
+        />
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- COLLECTION INTRO -->
+  <!-- ========================================================= -->
+
+  <section
+    class="max-w-7xl mx-auto
+           px-6 lg:px-10 pt-14"
+  >
+
+    <div class="text-center mb-10">
+
+      <p
+        class="text-[#c89b3c]
+               uppercase
+               tracking-[0.3em]
+               text-xs
+               font-semibold"
+      >
+        Fragrance Collection
+      </p>
+
+
+      <h2
+        class="text-3xl sm:text-4xl
+               font-serif
+               font-semibold
+               mt-3"
+      >
+        Find Your Signature Scent
+      </h2>
+
+
+      <p class="text-gray-500 mt-3">
+        Every fragrance tells a different story.
+      </p>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- CATEGORIES -->
+    <!-- ========================================================= -->
+
+    <div
+      class="flex gap-3
+             overflow-x-auto
+             pb-3
+             scrollbar-hide
+             justify-start
+             lg:justify-center"
+    >
+
+      <button
+        (click)="selectedCategory = 'All'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'All'"
+        [class.text-black]="selectedCategory === 'All'"
+        class="px-6 py-2.5
+               rounded-full
+               border border-gray-300
+               whitespace-nowrap
+               hover:border-[#c89b3c]
+               transition"
+      >
+        All Perfumes
+      </button>
+
+
+      <button
+        (click)="selectedCategory = 'Men'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Men'"
+        [class.text-black]="selectedCategory === 'Men'"
+        class="px-6 py-2.5
+               rounded-full
+               border border-gray-300
+               whitespace-nowrap
+               hover:border-[#c89b3c]
+               transition"
+      >
+        Men's
+      </button>
+
+
+      <button
+        (click)="selectedCategory = 'Women'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Women'"
+        [class.text-black]="selectedCategory === 'Women'"
+        class="px-6 py-2.5
+               rounded-full
+               border border-gray-300
+               whitespace-nowrap
+               hover:border-[#c89b3c]
+               transition"
+      >
+        Women's
+      </button>
+
+
+      <button
+        (click)="selectedCategory = 'Unisex'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Unisex'"
+        [class.text-black]="selectedCategory === 'Unisex'"
+        class="px-6 py-2.5
+               rounded-full
+               border border-gray-300
+               whitespace-nowrap
+               hover:border-[#c89b3c]
+               transition"
+      >
+        Unisex
+      </button>
+
+
+      <button
+        (click)="selectedCategory = 'Luxury'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Luxury'"
+        [class.text-black]="selectedCategory === 'Luxury'"
+        class="px-6 py-2.5
+               rounded-full
+               border border-gray-300
+               whitespace-nowrap
+               hover:border-[#c89b3c]
+               transition"
+      >
+        Luxury
+      </button>
+
+
+      <button
+        (click)="selectedCategory = 'Fresh'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Fresh'"
+        [class.text-black]="selectedCategory === 'Fresh'"
+        class="px-6 py-2.5
+               rounded-full
+               border border-gray-300
+               whitespace-nowrap
+               hover:border-[#c89b3c]
+               transition"
+      >
+        Fresh
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- SEARCH + SORT -->
+  <!-- ========================================================= -->
+
+  <section
+    class="max-w-7xl mx-auto
+           px-6 lg:px-10 mt-12"
+  >
+
+    <div
+      class="flex flex-col
+             md:flex-row
+             gap-4
+             md:items-center
+             md:justify-between"
+    >
+
+      <!-- SEARCH -->
+
+      <div
+        class="relative
+               w-full
+               md:max-w-md"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="absolute
+                 left-4 top-1/2
+                 -translate-y-1/2
+                 w-5 h-5
+                 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m21 21-4.35-4.35
+               m1.35-5.65
+               a7 7 0 1 1-14 0
+               7 7 0 0 1 14 0Z"
+          />
+
+        </svg>
+
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Search perfumes..."
+          class="w-full
+                 pl-12 pr-5 py-3
+                 rounded-full
+                 border border-gray-200
+                 bg-white
+                 focus:outline-none
+                 focus:border-[#c89b3c]
+                 transition"
+        />
+
+      </div>
+
+
+      <!-- SORT -->
+
+      <select
+        [(ngModel)]="sortOption"
+        class="px-5 py-3
+               rounded-full
+               border border-gray-200
+               bg-white
+               focus:outline-none
+               focus:border-[#c89b3c]"
+      >
+
+        <option value="default">
+          Sort By
+        </option>
+
+        <option value="low">
+          Price: Low to High
+        </option>
+
+        <option value="high">
+          Price: High to Low
+        </option>
+
+        <option value="rating">
+          Highest Rated
+        </option>
+
+      </select>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- PERFUME PRODUCTS -->
+  <!-- ========================================================= -->
+
+  <section
+    class="max-w-7xl mx-auto
+           px-6 lg:px-10
+           py-12"
+  >
+
+    <div
+      class="grid
+             grid-cols-1
+             sm:grid-cols-2
+             lg:grid-cols-3
+             xl:grid-cols-4
+             gap-6"
+    >
+
+      <!-- ===================================================== -->
+      <!-- PRODUCT CARD -->
+      <!-- ===================================================== -->
+
+      <div
+        *ngFor="let perfume of filteredPerfumes"
+        class="group
+               bg-white
+               rounded-2xl
+               overflow-hidden
+               border border-gray-100
+               hover:border-[#c89b3c]/40
+               hover:shadow-xl
+               transition duration-300"
+      >
+
+        <!-- PRODUCT IMAGE -->
+
+        <div
+          class="relative
+                 bg-[#f5f3ef]
+                 h-[320px]
+                 flex items-center
+                 justify-center
+                 overflow-hidden"
+        >
+
+          <!-- SALE BADGE -->
+
+          <span
+            *ngIf="perfume.discount"
+            class="absolute
+                   top-4 left-4 z-10
+                   bg-[#111111]
+                   text-[#c89b3c]
+                   text-xs
+                   font-semibold
+                   px-3 py-1.5
+                   rounded-full"
+          >
+            {{ perfume.discount }}% OFF
+          </span>
+
+
+          <!-- WISHLIST -->
+
+          <button
+            (click)="toggleWishlist(perfume)"
+            class="absolute
+                   top-4 right-4 z-10
+                   w-10 h-10
+                   rounded-full
+                   bg-white
+                   flex items-center
+                   justify-center
+                   shadow-sm
+                   hover:bg-[#111111]
+                   transition"
+          >
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              [class.text-red-500]="perfume.wishlist"
+              [class.fill-red-500]="perfume.wishlist"
+              [class.text-gray-600]="!perfume.wishlist"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M20.84 4.61a5.5 5.5
+                   0 0 0-7.78 0L12 5.67
+                   l-1.06-1.06a5.5 5.5
+                   0 0 0-7.78 7.78
+                   L12 21.23l8.84-8.84
+                   a5.5 5.5 0 0 0 0-7.78Z"
+              />
+
+            </svg>
+
+          </button>
+
+
+          <!-- PERFUME IMAGE -->
+
+          <img
+            [src]="perfume.image"
+            [alt]="perfume.name"
+            class="w-[210px]
+                   h-[270px]
+                   object-contain
+                   group-hover:scale-110
+                   transition duration-500"
+          />
+
+
+          <!-- QUICK VIEW -->
+
+          <button
+            class="absolute
+                   bottom-4
+                   left-1/2
+                   -translate-x-1/2
+                   bg-[#111111]
+                   text-white
+                   px-5 py-2
+                   rounded-full
+                   text-sm
+                   opacity-0
+                   group-hover:opacity-100
+                   transition duration-300"
+          >
+            Quick View
+          </button>
+
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- PRODUCT DETAILS -->
+        <!-- ===================================================== -->
+
+        <div class="p-5">
+
+          <!-- CATEGORY -->
+
+          <p
+            class="text-xs
+                   uppercase
+                   tracking-wider
+                   text-[#c89b3c]
+                   font-medium"
+          >
+            {{ perfume.category }}
+          </p>
+
+
+          <!-- NAME -->
+
+          <h3
+            class="font-semibold
+                   text-lg mt-1
+                   group-hover:text-[#b0842e]
+                   transition"
+          >
+            {{ perfume.name }}
+          </h3>
+
+
+          <!-- FRAGRANCE NOTES -->
+
+          <p
+            class="text-xs
+                   text-gray-400
+                   mt-1
+                   line-clamp-1"
+          >
+            {{ perfume.notes }}
+          </p>
+
+
+          <!-- RATING -->
+
+          <div
+            class="flex
+                   items-center
+                   gap-2 mt-2"
+          >
+
+            <div class="flex">
+
+              <span
+                *ngFor="let star of [1,2,3,4,5]"
+                class="text-sm"
+                [class.text-[#c89b3c]]="
+                  star <= perfume.rating
+                "
+                [class.text-gray-300]="
+                  star > perfume.rating
+                "
+              >
+                ★
+              </span>
+
+            </div>
+
+
+            <span
+              class="text-xs
+                     text-gray-400"
+            >
+              ({{ perfume.reviews }})
+            </span>
+
+          </div>
+
+
+          <!-- PRICE -->
+
+          <div
+            class="flex
+                   items-center
+                   justify-between
+                   mt-4"
+          >
+
+            <div>
+
+              <span
+                class="text-xl
+                       font-bold"
+              >
+                ₹{{ perfume.price | number }}
+              </span>
+
+
+              <span
+                *ngIf="perfume.oldPrice"
+                class="text-sm
+                       text-gray-400
+                       line-through
+                       ml-2"
+              >
+                ₹{{ perfume.oldPrice | number }}
+              </span>
+
+            </div>
+
+
+            <!-- CART -->
+
+            <button
+              (click)="addToCart(perfume)"
+              class="w-10 h-10
+                     rounded-full
+                     bg-[#111111]
+                     text-[#c89b3c]
+                     flex items-center
+                     justify-center
+                     hover:bg-[#c89b3c]
+                     hover:text-black
+                     transition"
+            >
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M3 3h2l.4 2
+                     M7 13h10l4-8H5.4
+                     M7 13 5.4 5
+                     M7 13l-2 2h14
+                     m-5 4a2 2 0 1 1-4 0
+                     m10 0a2 2 0 1 1-4 0"
+                />
+
+              </svg>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- NO RESULTS -->
+    <!-- ========================================================= -->
+
+    <div
+      *ngIf="filteredPerfumes.length === 0"
+      class="text-center
+             py-20"
+    >
+
+      <div
+        class="w-20 h-20
+               rounded-full
+               bg-[#c89b3c]/10
+               flex items-center
+               justify-center
+               mx-auto mb-5"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-9 h-9
+                 text-[#c89b3c]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            d="m21 21-4.35-4.35
+               m1.35-5.65
+               a7 7 0 1 1-14 0
+               7 7 0 0 1 14 0Z"
+          />
+
+        </svg>
+
+      </div>
+
+
+      <h3 class="text-xl font-semibold">
+        No perfumes found
+      </h3>
+
+
+      <p class="text-gray-500 mt-2">
+        Try another search or category.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- FRAGRANCE EXPERIENCE BANNER -->
+  <!-- ========================================================= -->
+
+  <section
+    class="max-w-7xl mx-auto
+           px-6 lg:px-10
+           pb-16"
+  >
+
+    <div
+      class="relative
+             overflow-hidden
+             rounded-3xl
+             bg-[#111111]
+             px-8 sm:px-12
+             py-14
+             text-center"
+    >
+
+      <div
+        class="absolute
+               -right-20 -top-20
+               w-60 h-60
+               rounded-full
+               bg-[#c89b3c]/10
+               blur-2xl"
+      ></div>
+
+
+      <p
+        class="text-[#c89b3c]
+               uppercase
+               tracking-[0.3em]
+               text-xs"
+      >
+        NiruStore Exclusive
+      </p>
+
+
+      <h2
+        class="text-white
+               text-3xl sm:text-4xl
+               font-serif
+               mt-4"
+      >
+        Your Fragrance. Your Story.
+      </h2>
+
+
+      <p
+        class="text-gray-400
+               max-w-xl
+               mx-auto
+               mt-4"
+      >
+        Make every moment memorable with fragrances
+        created to leave a lasting impression.
+      </p>
+
+
+      <button
+        class="mt-7
+               px-7 py-3
+               rounded-full
+               bg-[#c89b3c]
+               text-black
+               font-semibold
+               hover:bg-[#d8ae55]
+               transition"
+      >
+        Discover Your Scent
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,687 @@
+
+<!-- ===================================================== -->
+<!-- NIRUSTORE ADMIN DASHBOARD -->
+<!-- ===================================================== -->
+
+<div class="min-h-screen flex bg-[#faf9f6]">
+
+  <!-- SIDEBAR COMPONENT -->
+  <app-admin-left-pannel></app-admin-left-pannel>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 min-w-0 min-h-screen flex flex-col">
+
+    <!-- TOP BAR COMPONENT -->
+    <app-admin-top-bar></app-admin-top-bar>
+
+    <div class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8">
+
+      <!-- PAGE HEADER -->
+      <div class="flex flex-col sm:flex-row sm:items-center
+                  sm:justify-between gap-4 mb-6">
+
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
+            Dashboard
+          </h1>
+
+          <p class="text-sm text-gray-500 mt-1">
+            Overview of your NiruStore business
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="loadDashboard()"
+          [disabled]="isLoading"
+          class="rounded-lg bg-[#c89b3c] px-5 py-2.5
+                 text-sm font-semibold text-white
+                 hover:bg-[#b0842e] disabled:opacity-50">
+
+          {{ isLoading ? 'Refreshing...' : 'Refresh Dashboard' }}
+        </button>
+
+      </div>
+
+      <!-- LOADING -->
+      <div
+        *ngIf="isLoading"
+        class="mb-5 rounded-xl border border-gray-200
+               bg-white p-4 text-sm text-gray-600">
+
+        Loading dashboard data...
+      </div>
+
+      <!-- ERRORS -->
+      <div
+        *ngIf="dashboardError"
+        class="mb-5 rounded-xl border border-red-200
+               bg-red-50 p-4 text-sm text-red-700">
+
+        {{ dashboardError }}
+      </div>
+
+      <div
+        *ngIf="ordersError"
+        class="mb-5 rounded-xl border border-yellow-200
+               bg-yellow-50 p-4 text-sm text-yellow-800">
+
+        {{ ordersError }}
+      </div>
+
+      <div
+        *ngIf="customersError"
+        class="mb-5 rounded-xl border border-yellow-200
+               bg-yellow-50 p-4 text-sm text-yellow-800">
+
+        {{ customersError }}
+      </div>
+
+      <!-- ================================================= -->
+      <!-- STAT CARDS -->
+      <!-- ================================================= -->
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+        <!-- REVENUE -->
+        <div class="rounded-xl border border-gray-200 bg-white
+                    p-5 transition hover:shadow-md">
+
+          <div class="flex items-center justify-between">
+
+            <p class="text-sm text-gray-500">Total Revenue</p>
+
+            <div class="flex h-10 w-10 items-center justify-center
+                        rounded-lg bg-[#c89b3c]/10
+                        text-xl font-bold text-[#c89b3c]">
+              ₹
+            </div>
+
+          </div>
+
+          <h3 class="mt-3 break-words text-2xl font-bold text-gray-900">
+            {{ totalRevenue | currency:'INR':'symbol':'1.0-0' }}
+          </h3>
+
+         
+
+        </div>
+
+        <!-- ORDERS -->
+        <div class="rounded-xl border border-gray-200 bg-white
+                    p-5 transition hover:shadow-md">
+
+          <div class="flex items-center justify-between">
+
+            <p class="text-sm text-gray-500">Total Orders</p>
+
+            <div class="flex h-10 w-10 items-center justify-center
+                        rounded-lg bg-[#c89b3c]/10 text-[#c89b3c]">
+
+              <svg class="h-5 w-5" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.8"
+                      d="M6 2h12l2 5H4l2-5Zm-2 5h16v13H4V7Z"/>
+              </svg>
+
+            </div>
+
+          </div>
+
+          <h3 class="mt-3 text-2xl font-bold text-gray-900">
+            {{ totalOrders | number }}
+          </h3>
+
+         
+        </div>
+
+        <!-- CUSTOMERS -->
+        <div class="rounded-xl border border-gray-200 bg-white
+                    p-5 transition hover:shadow-md">
+
+          <div class="flex items-center justify-between">
+
+            <p class="text-sm text-gray-500">Total Customers</p>
+
+            <div class="flex h-10 w-10 items-center justify-center
+                        rounded-lg bg-[#c89b3c]/10 text-[#c89b3c]">
+
+              <svg class="h-5 w-5" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.8"
+                      d="M16 21v-2a4 4 0 0 0-4-4H6
+                         a4 4 0 0 0-4 4v2
+                         M9 11a4 4 0 1 0 0-8
+                         4 4 0 0 0 0 8
+                         M22 21v-2a4 4 0 0 0-3-3.87
+                         M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+
+            </div>
+
+          </div>
+
+          <h3 class="mt-3 text-2xl font-bold text-gray-900">
+            {{ totalCustomers | number }}
+          </h3>
+
+         
+        </div>
+
+        <!-- PRODUCTS -->
+        <div class="rounded-xl border border-gray-200 bg-white
+                    p-5 transition hover:shadow-md">
+
+          <div class="flex items-center justify-between">
+
+            <p class="text-sm text-gray-500">Total Products</p>
+
+            <div class="flex h-10 w-10 items-center justify-center
+                        rounded-lg bg-[#c89b3c]/10 text-[#c89b3c]">
+
+              <svg class="h-5 w-5" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.8"
+                      d="m21 8-9-5-9 5 9 5 9-5Zm-18 5
+                         9 5 9-5M3 8v8l9 5 9-5V8"/>
+              </svg>
+
+            </div>
+
+          </div>
+
+          <h3 class="mt-3 text-2xl font-bold text-gray-900">
+            {{ totalProducts | number }}
+          </h3>
+
+         
+
+        </div>
+
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SALES CHART + TOP PRODUCTS -->
+      <!-- ================================================= -->
+
+     
+<div class="mt-6 grid grid-cols-1 xl:grid-cols-3 gap-5 items-stretch">
+
+  <!-- ================================================ -->
+  <!-- SALES OVERVIEW -->
+  <!-- ================================================ -->
+
+  <section
+    class="xl:col-span-2 min-w-0 h-[520px]
+           rounded-xl border border-gray-200 bg-white
+           p-5 sm:p-6 flex flex-col overflow-hidden">
+
+    <!-- HEADER -->
+    <div
+      class="mb-5 flex shrink-0 flex-col gap-4
+             sm:flex-row sm:items-center sm:justify-between">
+
+      <div>
+        <h2 class="text-lg font-semibold text-gray-900">
+          Sales Overview
+        </h2>
+      </div>
+
+      <select
+        #periodSelect
+        [value]="selectedPeriod"
+        (change)="changePeriod(periodSelect.value)"
+        class="rounded-lg border border-gray-200 bg-white
+               px-3 py-2 text-sm outline-none
+               focus:border-[#c89b3c]">
+
+        <option value="year">Last 12 Months</option>
+        <option value="month">Last 30 Days</option>
+        <option value="week">Last 7 Days</option>
+
+      </select>
+
+    </div>
+
+    <!-- CHART -->
+    <div class="relative min-h-0 flex-1">
+
+      <!-- Y AXIS -->
+      <div
+        class="absolute left-0 top-0 bottom-8
+               flex w-14 flex-col justify-between
+               text-[10px] text-gray-400">
+
+        <span>
+          {{ chartMaximum | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+
+        <span>
+          {{ chartMaximum * 0.75 | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+
+        <span>
+          {{ chartMaximum * 0.5 | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+
+        <span>
+          {{ chartMaximum * 0.25 | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+
+        <span>₹0</span>
+
+      </div>
+
+      <!-- CHART AREA -->
+      <div class="absolute left-16 right-0 top-0 bottom-8">
+
+        <!-- GRID -->
+        <div
+          class="absolute inset-0 flex flex-col
+                 justify-between pointer-events-none">
+
+          <div class="border-t border-dashed border-gray-200"></div>
+          <div class="border-t border-dashed border-gray-200"></div>
+          <div class="border-t border-dashed border-gray-200"></div>
+          <div class="border-t border-dashed border-gray-200"></div>
+          <div class="border-t border-dashed border-gray-200"></div>
+
+        </div>
+
+        <!-- DYNAMIC SVG -->
+        <svg
+          viewBox="0 0 700 260"
+          preserveAspectRatio="none"
+          class="absolute inset-0 h-full w-full">
+
+          <polyline
+            *ngIf="chartPoints.length > 0"
+            [attr.points]="revenuePolyline"
+            fill="none"
+            stroke="#2f4b68"
+            stroke-width="3"
+            vector-effect="non-scaling-stroke" />
+
+          <polyline
+            *ngIf="chartPoints.length > 0"
+            [attr.points]="ordersPolyline"
+            fill="none"
+            stroke="#c89b3c"
+            stroke-width="3"
+            vector-effect="non-scaling-stroke" />
+
+          <polyline
+            *ngIf="chartPoints.length > 0"
+            [attr.points]="customersPolyline"
+            fill="none"
+            stroke="#55708c"
+            stroke-width="3"
+            vector-effect="non-scaling-stroke" />
+
+        </svg>
+
+        <!-- EMPTY STATE -->
+        <div
+          *ngIf="!orders.length"
+          class="absolute inset-0 flex items-center
+                 justify-center bg-white/80 text-center
+                 text-sm text-gray-400">
+
+          No order data available to display
+
+        </div>
+
+      </div>
+
+      <!-- X AXIS -->
+      <div
+        class="absolute bottom-0 left-16 right-0
+               flex justify-between gap-1 overflow-hidden
+               text-[9px] text-gray-400 sm:text-[10px]">
+
+        <span
+          *ngFor="let label of chartLabels; let i = index"
+          [class.hidden]="
+            chartLabels.length > 12 &&
+            i % chartLabelInterval !== 0
+          ">
+
+          {{ label }}
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- LEGEND -->
+    <div
+      class="mt-4 flex shrink-0 flex-wrap items-center
+             justify-center gap-4 sm:gap-6
+             text-xs text-gray-500">
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-3 rounded-full bg-[#2f4b68]"></span>
+        Revenue
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-3 rounded-full bg-[#c89b3c]"></span>
+        Orders
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="h-3 w-3 rounded-full bg-[#55708c]"></span>
+        Order activity
+      </div>
+
+    </div>
+
+    <!-- CHART SUMMARY -->
+    <div
+      class="mt-4 grid shrink-0 grid-cols-1 gap-3
+             border-t border-gray-100 pt-3 sm:grid-cols-3">
+
+      <div>
+        <p class="text-xs text-gray-400">Revenue in period</p>
+
+        <p class="mt-1 font-semibold text-gray-900">
+          {{
+            chartPoints.reduce(
+              (sum, point) => sum + point.revenue,
+              0
+            ) | currency:'INR':'symbol':'1.0-0'
+          }}
+        </p>
+      </div>
+
+      <div>
+        <p class="text-xs text-gray-400">Orders in period</p>
+
+        <p class="mt-1 font-semibold text-gray-900">
+          {{
+            chartPoints.reduce(
+              (sum, point) => sum + point.orders,
+              0
+            ) | number
+          }}
+        </p>
+      </div>
+
+      <div>
+        <p class="text-xs text-gray-400">Selected period</p>
+
+        <p class="mt-1 font-semibold text-gray-900">
+          {{
+            selectedPeriod === 'year'
+              ? 'Last 12 Months'
+              : selectedPeriod === 'month'
+                ? 'Last 30 Days'
+                : 'Last 7 Days'
+          }}
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================================================ -->
+  <!-- TOP SELLING PRODUCTS -->
+  <!-- ================================================ -->
+
+  <section
+    class="min-w-0 h-[520px] rounded-xl
+           border border-gray-200 bg-white
+           p-5 sm:p-6 flex flex-col overflow-hidden">
+
+    <!-- HEADER -->
+    <div class="mb-4 shrink-0">
+
+      <h2 class="text-lg font-semibold text-gray-900">
+        Top Selling Products
+      </h2>
+
+      <p class="mt-1 text-xs text-gray-400">
+        Ranked by quantities in loaded orders
+      </p>
+
+    </div>
+
+    <!-- PRODUCT LIST: MAXIMUM 4 PRODUCTS -->
+    <div
+      *ngIf="topProducts.length"
+      class="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
+
+      <div
+        *ngFor="let product of topProducts.slice(0, 4)"
+        class="flex min-h-[90px] flex-1 items-center gap-3
+               overflow-hidden rounded-xl border
+               border-gray-100 bg-gray-50 p-3
+               transition hover:border-[#c89b3c]">
+
+        <!-- LEFT: SAME IMAGE SIZE FOR EVERY PRODUCT -->
+        <div
+          class="h-[76px] w-[76px] shrink-0 overflow-hidden
+                 rounded-lg border border-gray-200 bg-white
+                 sm:h-[84px] sm:w-[84px]">
+
+          <img
+            [src]="product.image || 'https://placehold.co/100x100?text=Product'"
+            [alt]="product.name"
+            (error)="onProductImageError($event)"
+            class="h-full w-full object-contain p-1" />
+
+        </div>
+
+        <!-- RIGHT: PRODUCT INFORMATION -->
+        <div class="min-w-0 flex-1">
+
+          <h3
+            class="truncate text-sm font-semibold text-gray-900"
+            [title]="product.name">
+
+            {{ product.name }}
+
+          </h3>
+
+          <p class="mt-1 text-xs text-gray-500">
+            Units sold:
+            <span class="font-semibold text-gray-800">
+              {{ product.sold }}
+            </span>
+          </p>
+
+          <p class="mt-1 text-sm font-semibold text-[#a67c24]">
+            {{ product.revenue | currency:'INR':'symbol':'1.0-0' }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div
+      *ngIf="!topProducts.length"
+      class="flex min-h-0 flex-1 items-center
+             justify-center text-center text-sm
+             text-gray-400">
+
+      No product sales data available yet.
+
+    </div>
+
+  </section>
+
+</div>
+
+
+      <!-- ================================================= -->
+      <!-- RECENT ORDERS -->
+      <!-- ================================================= -->
+
+      <section class="mt-6 overflow-hidden rounded-xl
+                      border border-gray-200 bg-white">
+
+        <!-- HEADER -->
+        <div class="flex flex-col gap-3 p-5
+                    sm:flex-row sm:items-center sm:justify-between">
+
+          <div>
+
+            <h2 class="text-lg font-semibold text-gray-900">
+              Recent Orders
+            </h2>
+
+
+          </div>
+
+          <!-- <tr *ngFor="let order of recentOrders">
+  <td>{{ order.id }}</td>
+  <td>{{ order.customer }}</td>
+  <td>{{ order.product }}</td>
+  <td>{{ order.amount | currency:'INR':'symbol':'1.0-0' }}</td>
+  <td>{{ order.status }}</td>
+</tr> -->
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="overflow-x-auto">
+
+          <table class="w-full min-w-[720px] text-sm">
+
+            <thead class="bg-[#faf9f6] text-xs uppercase
+                          tracking-wider text-gray-500">
+
+              <tr>
+
+                <th class="px-5 py-4 text-left font-medium">
+                  Order ID
+                </th>
+
+                <th class="px-5 py-4 text-left font-medium">
+                  Customer
+                </th>
+
+                <th class="px-5 py-4 text-left font-medium">
+                  Product
+                </th>
+
+                <th class="px-5 py-4 text-left font-medium">
+                  Amount
+                </th>
+
+                <th class="px-5 py-4 text-left font-medium">
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr
+                *ngFor="let order of recentOrders"
+                class="border-t border-gray-100 transition
+                       hover:bg-[#faf9f6]">
+
+                <td class="whitespace-nowrap px-5 py-4 font-medium">
+                  {{ order.id }}
+                </td>
+
+                <td class="px-5 py-4">
+                  {{ order.customer }}
+                </td>
+
+                <td class="max-w-xs px-5 py-4 text-gray-600">
+                  <span class="line-clamp-2">
+                    {{ order.product }}
+                  </span>
+                </td>
+
+                <td class="whitespace-nowrap px-5 py-4 font-semibold">
+                  {{ order.amount | currency:'INR':'symbol':'1.0-0' }}
+                </td>
+
+                <td class="px-5 py-4">
+
+                  <span
+                    class="inline-flex rounded-full px-3 py-1
+                           text-xs font-medium"
+                    [ngClass]="{
+                      'bg-emerald-100 text-emerald-700':
+                        order.status.toLowerCase() === 'delivered',
+
+                      'bg-yellow-100 text-yellow-700':
+                        order.status.toLowerCase() === 'pending',
+
+                      'bg-blue-100 text-blue-700':
+                        order.status.toLowerCase() === 'processing',
+
+                      'bg-red-100 text-red-700':
+                        order.status.toLowerCase() === 'cancelled' ||
+                        order.status.toLowerCase() === 'canceled',
+
+                      'bg-gray-100 text-gray-700':
+                        ![
+                          'delivered',
+                          'pending',
+                          'processing',
+                          'cancelled',
+                          'canceled'
+                        ].includes(order.status.toLowerCase())
+                    }">
+
+                    {{ order.status }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+              <!-- EMPTY STATE -->
+              <tr *ngIf="!recentOrders.length">
+
+                <td colspan="5"
+                    class="px-5 py-12 text-center text-sm text-gray-400">
+
+                  <span *ngIf="!ordersError">
+                    No orders are available yet.
+                  </span>
+
+                  <span *ngIf="ordersError">
+                    Orders could not be loaded. Check the API configuration.
+                  </span>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>

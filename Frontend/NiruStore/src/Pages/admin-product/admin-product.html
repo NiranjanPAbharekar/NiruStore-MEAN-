@@ -1,0 +1,1192 @@
+<div class="min-h-screen bg-[#f8f7f4] p-4 md:p-6 lg:p-8">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div
+    class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+    <div>
+
+      <p
+        class="text-sm font-medium text-[#c89b3c]">
+        ADMIN PANEL
+      </p>
+
+      <h1
+        class="mt-1 text-2xl md:text-3xl font-bold text-gray-900">
+        Products
+      </h1>
+
+      <p
+        class="mt-1 text-sm text-gray-500">
+        Manage your store products, prices, stock and images.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      (click)="openAddProduct()"
+      class="flex items-center justify-center gap-2 rounded-xl bg-[#c89b3c] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#b58a31] active:scale-95">
+
+      <span class="text-xl leading-none">
+        +
+      </span>
+
+      Add Product
+
+    </button>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS MESSAGE -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="successMessage"
+    class="mb-5 flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+
+    <span
+      class="flex h-6 w-6 items-center justify-center rounded-full bg-green-100">
+      ✓
+    </span>
+
+    {{ successMessage }}
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR MESSAGE -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="errorMessage"
+    class="mb-5 flex items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+
+    <div class="flex items-center gap-3">
+
+      <span
+        class="flex h-6 w-6 items-center justify-center rounded-full bg-red-100">
+        !
+      </span>
+
+      {{ errorMessage }}
+
+    </div>
+
+
+    <button
+      type="button"
+      (click)="errorMessage = ''"
+      class="text-lg text-red-400 hover:text-red-600">
+
+      ×
+
+    </button>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- FILTER CARD -->
+  <!-- ===================================================== -->
+
+  <div
+    class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+
+    <div
+      class="grid grid-cols-1 gap-3 md:grid-cols-3">
+
+      <!-- SEARCH -->
+
+      <div class="relative">
+
+        <span
+          class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+          🔍
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (ngModelChange)="applyFilters()"
+          placeholder="Search product, brand..."
+          class="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 text-sm outline-none transition focus:border-[#c89b3c] focus:bg-white focus:ring-2 focus:ring-[#c89b3c]/10">
+
+      </div>
+
+
+      <!-- CATEGORY -->
+
+      <select
+        [(ngModel)]="selectedCategory"
+        (ngModelChange)="applyFilters()"
+        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#c89b3c] focus:bg-white">
+
+        <option value="">
+          All Categories
+        </option>
+
+        <option
+          *ngFor="let category of categories"
+          [value]="category">
+
+          {{ category }}
+
+        </option>
+
+      </select>
+
+
+      <!-- STATUS -->
+
+      <select
+        [(ngModel)]="selectedStatus"
+        (ngModelChange)="applyFilters()"
+        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#c89b3c] focus:bg-white">
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="Active">
+          Active
+        </option>
+
+        <option value="Inactive">
+          Inactive
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="loading && products.length === 0"
+    class="flex min-h-[300px] items-center justify-center">
+
+    <div class="text-center">
+
+      <div
+        class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-[#c89b3c]">
+      </div>
+
+      <p
+        class="mt-3 text-sm text-gray-500">
+        Loading products...
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- EMPTY -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="!loading && filteredProducts.length === 0"
+    class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+
+    <div
+      class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#c89b3c]/10 text-3xl">
+
+      📦
+
+    </div>
+
+    <h3
+      class="mt-4 text-lg font-semibold text-gray-900">
+
+      No products found
+
+    </h3>
+
+    <p
+      class="mt-1 text-sm text-gray-500">
+
+      Add your first product to get started.
+
+    </p>
+
+
+    <button
+      type="button"
+      (click)="openAddProduct()"
+      class="mt-5 rounded-xl bg-[#c89b3c] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#b58a31]">
+
+      + Add Product
+
+    </button>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- PRODUCT GRID -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="filteredProducts.length > 0"
+    class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+
+
+    <div
+      *ngFor="let product of filteredProducts"
+      class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+
+      <!-- ================================================= -->
+      <!-- IMAGE -->
+      <!-- ================================================= -->
+
+      <div
+        class="relative h-64 overflow-hidden bg-gray-100">
+
+        <img
+          [src]="product.image"
+          [alt]="product.productName"
+          (error)="imageError($event)"
+          class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+
+
+        <!-- STATUS -->
+
+        <div
+          class="absolute left-3 top-3">
+
+          <span
+            *ngIf="product.status === 'Active'"
+            class="rounded-full bg-green-500 px-3 py-1 text-xs font-semibold text-white shadow">
+
+            Active
+
+          </span>
+
+          <span
+            *ngIf="product.status === 'Inactive'"
+            class="rounded-full bg-gray-700 px-3 py-1 text-xs font-semibold text-white shadow">
+
+            Inactive
+
+          </span>
+
+        </div>
+
+
+        <!-- DISCOUNT -->
+
+        <div
+          *ngIf="product.discount > 0"
+          class="absolute right-3 top-3 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white shadow">
+
+          {{ product.discount }}% OFF
+
+        </div>
+
+
+        <!-- SUB IMAGE COUNT -->
+
+        <div
+          *ngIf="product.subImages?.length"
+          class="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+
+          +{{ product.subImages.length }} images
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- PRODUCT INFO -->
+      <!-- ================================================= -->
+
+      <div class="p-5">
+
+        <!-- BRAND -->
+
+        <p
+          class="text-xs font-semibold uppercase tracking-wider text-[#c89b3c]">
+
+          {{ product.brand }}
+
+        </p>
+
+
+        <!-- NAME -->
+
+        <h2
+          class="mt-1 min-h-[48px] line-clamp-2 text-base font-bold text-gray-900">
+
+          {{ product.productName }}
+
+        </h2>
+
+
+        <!-- CATEGORY -->
+
+        <div
+          class="mt-2">
+
+          <span
+            class="rounded-md bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
+
+            {{ product.category }}
+
+          </span>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PRICE -->
+        <!-- ================================================= -->
+
+        <div
+          class="mt-4 flex items-end gap-2">
+
+          <span
+            class="text-xl font-bold text-gray-900">
+
+            ₹{{ product.discountedPrice | number:'1.0-2' }}
+
+          </span>
+
+
+          <span
+            *ngIf="product.discount > 0"
+            class="text-sm text-gray-400 line-through">
+
+            ₹{{ product.price | number:'1.0-2' }}
+
+          </span>
+
+        </div>
+
+
+        <!-- SAVING -->
+
+        <p
+          *ngIf="product.discount > 0"
+          class="mt-1 text-xs font-medium text-green-600">
+
+          You save ₹{{ (product.price - product.discountedPrice) | number:'1.0-2' }}
+
+        </p>
+
+
+        <!-- ================================================= -->
+        <!-- STOCK -->
+        <!-- ================================================= -->
+
+        <div
+          class="mt-4 flex items-center justify-between rounded-xl bg-gray-50 px-3 py-2.5">
+
+          <span
+            class="text-xs text-gray-500">
+
+            Stock
+
+          </span>
+
+
+          <span
+            [class.text-red-600]="product.stock === 0"
+            [class.text-orange-500]="product.stock > 0 && product.stock <= 5"
+            [class.text-green-600]="product.stock > 5"
+            class="text-sm font-bold">
+
+            {{ product.stock }} units
+
+          </span>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ACTIONS -->
+        <!-- ================================================= -->
+
+        <div
+          class="mt-4 grid grid-cols-2 gap-2">
+
+          <button
+            type="button"
+            (click)="editProduct(product)"
+            class="rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#c89b3c] hover:bg-[#c89b3c]/5 hover:text-[#a47d28]">
+
+            Edit
+
+          </button>
+
+
+          <button
+            type="button"
+            (click)="deleteProduct(product._id!)"
+            class="rounded-xl border border-red-100 px-3 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-50">
+
+            Delete
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- ADD / EDIT MODAL -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="showProductModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm md:p-6">
+
+
+    <div
+      class="flex max-h-[95vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+
+
+      <!-- ================================================= -->
+      <!-- MODAL HEADER -->
+      <!-- ================================================= -->
+
+      <div
+        class="flex items-center justify-between border-b border-gray-200 px-5 py-4 md:px-6">
+
+        <div>
+
+          <p
+            class="text-xs font-semibold uppercase tracking-wider text-[#c89b3c]">
+
+            PRODUCT MANAGEMENT
+
+          </p>
+
+          <h2
+            class="mt-1 text-xl font-bold text-gray-900">
+
+            {{ editingProduct ? 'Edit Product' : 'Add New Product' }}
+
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          (click)="closeProductModal()"
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-xl text-gray-500 hover:bg-gray-200">
+
+          ×
+
+        </button>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- MODAL BODY -->
+      <!-- ================================================= -->
+
+      <div
+        class="overflow-y-auto p-5 md:p-6">
+
+
+        <!-- ERROR -->
+
+        <div
+          *ngIf="errorMessage"
+          class="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+
+          {{ errorMessage }}
+
+        </div>
+
+
+        <form
+          [formGroup]="productForm"
+          (ngSubmit)="saveProduct()">
+
+
+          <!-- ================================================= -->
+          <!-- BASIC INFORMATION -->
+          <!-- ================================================= -->
+
+          <div>
+
+            <h3
+              class="mb-4 text-sm font-bold uppercase tracking-wider text-gray-700">
+
+              Basic Information
+
+            </h3>
+
+
+            <div
+              class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
+
+              <!-- BRAND -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Brand
+                  <span class="text-red-500">*</span>
+
+                </label>
+
+                <input
+                  type="text"
+                  formControlName="brand"
+                  placeholder="e.g. Armani"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#c89b3c] focus:bg-white focus:ring-2 focus:ring-[#c89b3c]/10">
+
+
+                <p
+                  *ngIf="productForm.get('brand')?.touched && productForm.get('brand')?.invalid"
+                  class="mt-1 text-xs text-red-500">
+
+                  Brand is required.
+
+                </p>
+
+              </div>
+
+
+              <!-- PRODUCT NAME -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Product Name
+                  <span class="text-red-500">*</span>
+
+                </label>
+
+                <input
+                  type="text"
+                  formControlName="productName"
+                  placeholder="e.g. Armani Code"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#c89b3c] focus:bg-white focus:ring-2 focus:ring-[#c89b3c]/10">
+
+
+                <p
+                  *ngIf="productForm.get('productName')?.touched && productForm.get('productName')?.invalid"
+                  class="mt-1 text-xs text-red-500">
+
+                  Product name is required.
+
+                </p>
+
+              </div>
+
+
+              <!-- CATEGORY -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Category
+                  <span class="text-red-500">*</span>
+
+                </label>
+
+                <select
+                  formControlName="category"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+                  <option value="">
+                    Select Category
+                  </option>
+
+                  <option value="Watch">
+                    Watches
+                  </option>
+
+                  <option value="Shoes">
+                    Shoes
+                  </option>
+
+                  <option value="Perfume">
+                    Perfumes
+                  </option>
+
+                  <option value="MenClothing">
+                    Men Clothing
+                  </option>
+                  <option value="WomenClothing">
+                    Women Clothing
+                  </option>
+
+
+                  <option value="Accessories">
+                    Accessories
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- STATUS -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Status
+
+                </label>
+
+                <select
+                  formControlName="status"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+                  <option value="Active">
+                    Active
+                  </option>
+
+                  <option value="Inactive">
+                    Inactive
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- PRICE / STOCK -->
+          <!-- ================================================= -->
+
+          <div
+            class="mt-7">
+
+            <h3
+              class="mb-4 text-sm font-bold uppercase tracking-wider text-gray-700">
+
+              Pricing & Stock
+
+            </h3>
+
+
+            <div
+              class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+
+              <!-- PRICE -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Original Price
+                  <span class="text-red-500">*</span>
+
+                </label>
+
+                <div class="relative">
+
+                  <span
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+
+                    ₹
+
+                  </span>
+
+                  <input
+                    type="number"
+                    formControlName="price"
+                    min="1"
+                    placeholder="2500"
+                    class="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-9 pr-4 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+                </div>
+
+              </div>
+
+
+              <!-- DISCOUNT -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Discount
+
+                </label>
+
+                <div class="relative">
+
+                  <input
+                    type="number"
+                    formControlName="discount"
+                    min="0"
+                    max="100"
+                    placeholder="20"
+                    class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+                  <span
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-gray-500">
+
+                    %
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- STOCK -->
+
+              <div>
+
+                <label
+                  class="mb-1.5 block text-sm font-medium text-gray-700">
+
+                  Stock
+                  <span class="text-red-500">*</span>
+
+                </label>
+
+                <input
+                  type="number"
+                  formControlName="stock"
+                  min="0"
+                  placeholder="100"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+              </div>
+
+            </div>
+
+
+            <!-- DISCOUNT PREVIEW -->
+
+            <div
+              *ngIf="productForm.get('price')?.value"
+              class="mt-4 rounded-xl border border-green-100 bg-green-50 p-4">
+
+              <div
+                class="flex flex-wrap items-center justify-between gap-3">
+
+                <div>
+
+                  <p
+                    class="text-xs font-medium text-green-600">
+
+                    FINAL SELLING PRICE
+
+                  </p>
+
+                  <p
+                    class="mt-1 text-xl font-bold text-green-700">
+
+                    ₹{{ getCurrentDiscountedPrice() | number:'1.0-2' }}
+
+                  </p>
+
+                </div>
+
+
+                <div
+                  *ngIf="productForm.get('discount')?.value > 0"
+                  class="text-right">
+
+                  <p
+                    class="text-xs text-gray-500">
+
+                    Customer saves
+
+                  </p>
+
+                  <p class="text-sm font-bold text-green-600">
+
+  ₹{{
+    (
+      toNumber(productForm.get('price')?.value)
+      -
+      getCurrentDiscountedPrice()
+    )
+    | number:'1.0-2'
+  }}
+
+</p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- MAIN IMAGE -->
+          <!-- ================================================= -->
+
+          <div
+            class="mt-7">
+
+            <h3
+              class="mb-4 text-sm font-bold uppercase tracking-wider text-gray-700">
+
+              Product Images
+
+            </h3>
+
+
+            <label
+              class="mb-1.5 block text-sm font-medium text-gray-700">
+
+              Main Product Image URL
+              <span class="text-red-500">*</span>
+
+            </label>
+
+            <input
+              type="text"
+              formControlName="image"
+              placeholder="https://example.com/product-image.jpg"
+              class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+
+            <!-- MAIN IMAGE PREVIEW -->
+
+            <div
+              *ngIf="productForm.get('image')?.value"
+              class="mt-4">
+
+              <div
+                class="relative h-48 w-48 overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
+
+                <img
+                  [src]="productForm.get('image')?.value"
+                  alt="Product preview"
+                  class="h-full w-full object-cover">
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- SUB IMAGES -->
+          <!-- ================================================= -->
+
+          <!-- <div
+            class="mt-7">
+
+            <div
+              class="mb-4 flex items-center justify-between">
+
+              <div>
+
+                <h3
+                  class="text-sm font-bold uppercase tracking-wider text-gray-700">
+
+                  Sub Images
+
+                </h3>
+
+                <p
+                  class="mt-1 text-xs text-gray-500">
+
+                  Add up to 5 additional product images.
+
+                </p>
+
+              </div>
+
+
+              <span
+                class="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
+
+                {{ subImages.length }} / 5
+
+              </span>
+
+            </div>
+
+
+           
+
+            <div
+              *ngIf="subImages.length > 0"
+              class="space-y-3">
+
+
+              <div
+                *ngFor="let subImage of subImages; let i = index"
+                class="flex gap-3">
+
+
+                <div
+                  class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100">
+
+                  <img
+                    *ngIf="subImage"
+                    [src]="subImage"
+                    alt="Sub image"
+                    class="h-full w-full object-cover">
+
+                  <span
+                    *ngIf="!subImage"
+                    class="text-xs text-gray-400">
+
+                    IMG
+
+                  </span>
+
+                </div>
+
+
+                <input
+                  type="text"
+                  [value]="subImage"
+                  (input)="updateSubImage(i, $any($event.target).value)"
+                  [placeholder]="'Sub image URL ' + (i + 1)"
+                  class="min-w-0 flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+
+
+                <button
+                  type="button"
+                  (click)="removeSubImage(i)"
+                  class="h-12 w-12 shrink-0 rounded-xl border border-red-100 text-lg text-red-500 hover:bg-red-50">
+
+                  ×
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+
+            <button
+              *ngIf="subImages.length < 5"
+              type="button"
+              (click)="addSubImage()"
+              class="mt-3 rounded-xl border border-dashed border-[#c89b3c] px-4 py-3 text-sm font-semibold text-[#a47d28] transition hover:bg-[#c89b3c]/5">
+
+              + Add Sub Image
+
+            </button>
+
+
+            <p
+              *ngIf="subImages.length === 5"
+              class="mt-3 text-xs font-medium text-orange-500">
+
+              Maximum 5 sub images reached.
+
+            </p>
+
+          </div> -->
+          
+<!-- SUB-PRODUCT IMAGES -->
+<div class="md:col-span-2">
+
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700">
+        Additional Product Images
+      </label>
+      <p class="mt-1 text-xs text-gray-500">
+        Add up to 5 image URLs for the product gallery.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="addSubImage()"
+      [disabled]="subImages.length >= 5"
+      class="rounded-lg bg-[#c89b3c] px-4 py-2
+             text-sm font-semibold text-white
+             hover:bg-[#b58a2a] disabled:cursor-not-allowed
+             disabled:opacity-50">
+      + Add Image
+    </button>
+  </div>
+
+  <div class="space-y-4">
+
+    <div
+      *ngFor="let subImage of subImages; let i = index"
+      class="rounded-xl border border-gray-200 p-4">
+
+      <div class="flex items-center justify-between gap-3">
+        <label
+          class="text-sm font-medium text-gray-700"
+          [for]="'subImage' + i">
+          Image {{ i + 1 }} URL
+        </label>
+
+        <button
+          type="button"
+          (click)="removeSubImage(i)"
+          class="text-sm font-medium text-red-600 hover:text-red-800">
+          Remove
+        </button>
+      </div>
+
+      <input
+        [id]="'subImage' + i"
+        type="url"
+        [ngModel]="subImage"
+        (ngModelChange)="updateSubImage(i, $event)"
+        [ngModelOptions]="{ standalone: true }"
+        [name]="'subImage' + i"
+        placeholder="https://example.com/product-image.jpg"
+        class="mt-2 w-full rounded-lg border border-gray-300
+               px-4 py-3 text-sm text-gray-900
+               outline-none focus:border-[#c89b3c]"
+      />
+
+      <!-- IMAGE PREVIEW -->
+      <div
+        *ngIf="subImage.trim()"
+        class="mt-3">
+
+        <img
+          [src]="subImage"
+          (error)="imageError($event)"
+          [alt]="'Product gallery image ' + (i + 1)"
+          class="h-28 w-28 rounded-lg border border-gray-200
+                 object-cover"
+        />
+
+      </div>
+
+    </div>
+
+    <p
+      *ngIf="subImages.length === 0"
+      class="rounded-lg bg-gray-50 p-4 text-sm text-gray-500">
+      No additional images added yet.
+    </p>
+
+  </div>
+
+</div>
+
+
+          <!-- ================================================= -->
+          <!-- DESCRIPTION -->
+          <!-- ================================================= -->
+
+          <div
+            class="mt-7">
+
+            <label
+              class="mb-1.5 block text-sm font-medium text-gray-700">
+
+              Description
+              <span class="text-red-500">*</span>
+
+            </label>
+
+            <textarea
+              formControlName="description"
+              rows="5"
+              placeholder="Enter detailed product description..."
+              class="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:bg-white">
+            </textarea>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- BUTTONS -->
+          <!-- ================================================= -->
+
+          <div
+            class="mt-8 flex flex-col-reverse gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:justify-end">
+
+            <button
+              type="button"
+              (click)="closeProductModal()"
+              class="rounded-xl border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50">
+
+              Cancel
+
+            </button>
+
+
+            <button
+              type="submit"
+              [disabled]="loading"
+              class="rounded-xl bg-[#c89b3c] px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#b58a31] disabled:cursor-not-allowed disabled:opacity-60">
+
+              <span
+                *ngIf="!loading">
+
+                {{ editingProduct ? 'Update Product' : 'Add Product' }}
+
+              </span>
+
+
+              <span
+                *ngIf="loading"
+                class="flex items-center justify-center gap-2">
+
+                <span
+                  class="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white">
+                </span>
+
+                Saving...
+
+              </span>
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,21 @@
+@keyframes zoom {
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    100%{
+
+        transform:scale(1.15);
+
+    }
+
+}
+
+.animate-zoom{
+
+    animation:zoom 8s linear infinite alternate;
+
+}

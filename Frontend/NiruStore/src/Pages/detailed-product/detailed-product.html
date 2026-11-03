@@ -1,0 +1,619 @@
+
+<!-- LOADING -->
+<section
+  *ngIf="loading"
+  class="min-h-screen bg-[#0b0b0b] flex items-center justify-center px-4">
+
+  <div class="text-center">
+    <div
+      class="w-12 h-12 border-4 border-gray-700
+             border-t-[#d4af37] rounded-full
+             animate-spin mx-auto">
+    </div>
+
+    <p class="text-gray-300 mt-5">
+      Loading product details...
+    </p>
+  </div>
+</section>
+
+<!-- PRODUCT DETAILS PAGE -->
+<section
+  *ngIf="!loading && product"
+  class="min-h-screen bg-[#0b0b0b] text-white py-8 sm:py-12">
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- BREADCRUMB -->
+    <div
+      class="flex flex-wrap items-center gap-2
+             text-sm text-gray-500 mb-8">
+
+      <button
+        type="button"
+        (click)="goBack()"
+        class="hover:text-[#d4af37] transition">
+        Shop
+      </button>
+
+      <i class="fa-solid fa-chevron-right text-xs"></i>
+
+      <span>{{ product.category }}</span>
+
+      <i class="fa-solid fa-chevron-right text-xs"></i>
+
+      <span class="text-[#d4af37]">
+        {{ product.productName }}
+      </span>
+
+    </div>
+
+    <!-- MAIN PRODUCT LAYOUT -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14">
+
+      <!-- ============================================== -->
+      <!-- LEFT: PRODUCT IMAGE GALLERY -->
+      <!-- ============================================== -->
+
+      <div class="min-w-0">
+
+        <!-- MAIN IMAGE -->
+        <div
+          class="relative overflow-hidden rounded-2xl
+                 border border-gray-800 bg-[#111111]">
+
+          <img
+            [src]="selectedImage || product.image"
+            [alt]="product.productName"
+            class="w-full h-[350px] sm:h-[480px] lg:h-[580px]
+                   object-contain p-4 sm:p-8
+                   transition duration-500">
+
+          <!-- PRODUCT BADGE -->
+          <span
+            *ngIf="product.badge"
+            class="absolute top-4 left-4
+                   bg-red-500 text-white
+                   text-xs font-semibold
+                   px-4 py-2 rounded-full">
+
+            {{ product.badge }}
+
+          </span>
+
+          <!-- DISCOUNT BADGE -->
+          <span
+            *ngIf="calculateDiscount() > 0"
+            class="absolute bottom-4 left-4
+                   bg-[#d4af37] text-black
+                   text-sm font-bold px-4 py-2 rounded-full">
+
+            {{ calculateDiscount() }}% OFF
+
+          </span>
+
+          <!-- IMAGE COUNT -->
+          <span
+            class="absolute top-4 right-4
+                   bg-black/70 text-gray-300
+                   text-xs px-3 py-2 rounded-full">
+
+            {{ product.images.length }} Images
+
+          </span>
+
+        </div>
+
+        <!-- THUMBNAILS UNDER MAIN IMAGE -->
+        
+<!-- PRODUCT IMAGE PREVIEWS -->
+<div
+  *ngIf="product.images && product.images.length > 1"
+  class="grid grid-cols-4 sm:grid-cols-5 gap-3 mt-4">
+
+  <button
+    *ngFor="let image of product.images; let i = index"
+    type="button"
+    (click)="selectImage(image)"
+    [attr.aria-label]="'View product image ' + (i + 1)"
+    [class.border-[#d4af37]]="selectedImage === image"
+    [class.border-gray-800]="selectedImage !== image"
+    class="min-w-0 overflow-hidden rounded-xl border-2
+           bg-[#111111] hover:border-[#d4af37]
+           transition focus:outline-none
+           focus:ring-2 focus:ring-[#d4af37]">
+
+    <img
+      [src]="image"
+      [alt]="product.productName + ' preview ' + (i + 1)"
+      class="w-full h-20 sm:h-24 object-contain p-2"
+      (error)="onThumbnailError($event, image)">
+
+  </button>
+</div>
+
+<!-- MESSAGE WHEN THERE ARE NO EXTRA IMAGES -->
+<p
+  *ngIf="!product.images || product.images.length <= 1"
+  class="text-gray-500 text-sm mt-4 text-center">
+
+  No additional product images available.
+
+</p>
+
+
+        <!-- SINGLE IMAGE MESSAGE -->
+        <p
+          *ngIf="product.images.length <= 1"
+          class="text-gray-600 text-sm mt-3 text-center">
+
+          More product images can be added from your admin panel.
+
+        </p>
+
+        <!-- TRUST FEATURES -->
+        <div
+          class="grid grid-cols-3 gap-3 mt-6
+                 border border-gray-800 rounded-xl p-4">
+
+          <div class="text-center">
+            <i class="fa-solid fa-truck-fast text-[#d4af37] text-xl"></i>
+            <p class="text-gray-400 text-xs mt-2">Delivery</p>
+          </div>
+
+          <div class="text-center">
+            <i class="fa-solid fa-shield-halved text-[#d4af37] text-xl"></i>
+            <p class="text-gray-400 text-xs mt-2">Secure Shopping</p>
+          </div>
+
+          <div class="text-center">
+            <i class="fa-solid fa-gem text-[#d4af37] text-xl"></i>
+            <p class="text-gray-400 text-xs mt-2">Premium Style</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- RIGHT: PRODUCT INFORMATION -->
+      <!-- ============================================== -->
+
+      <div class="min-w-0">
+
+        <!-- BRAND -->
+        <p
+          class="text-[#d4af37] uppercase
+                 tracking-[0.25em] text-sm font-semibold">
+
+          {{ product.brand }}
+
+        </p>
+
+        <!-- PRODUCT NAME -->
+        <h1
+          class="text-3xl sm:text-4xl lg:text-5xl
+                 font-bold mt-3 leading-tight break-words">
+
+          {{ product.productName }}
+
+        </h1>
+
+        <!-- CATEGORY -->
+        <p class="text-gray-500 mt-3">
+          Category:
+          <span class="text-gray-300">
+            {{ product.category }}
+          </span>
+        </p>
+
+        <!-- RATING -->
+        <div class="flex flex-wrap items-center gap-3 mt-5">
+
+          <div class="flex items-center gap-1">
+
+            <i
+              *ngFor="let star of stars"
+              class="fa-star text-sm"
+              [ngClass]="
+                star <= product.rating
+                  ? 'fa-solid text-[#d4af37]'
+                  : 'fa-regular text-gray-600'
+              ">
+            </i>
+
+          </div>
+
+          <span class="text-gray-300 text-sm">
+            {{ product.rating || 0 }}/5
+          </span>
+
+          <span class="text-gray-600">|</span>
+
+          <span class="text-gray-400 text-sm">
+            {{ product.reviews }} reviews
+          </span>
+
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="border-t border-gray-800 my-6"></div>
+
+        <!-- PRICE -->
+        <div class="flex flex-wrap items-center gap-3">
+
+          <span class="text-3xl sm:text-4xl font-bold text-white">
+            ₹{{ product.discountPrice | number:'1.0-2' }}
+          </span>
+
+          <span
+            *ngIf="product.discountPrice < product.price"
+            class="text-gray-500 text-lg line-through">
+
+            ₹{{ product.price | number:'1.0-2' }}
+
+          </span>
+
+          <span
+            *ngIf="calculateDiscount() > 0"
+            class="text-green-400 text-sm font-semibold">
+
+            Save {{ calculateDiscount() }}%
+
+          </span>
+
+        </div>
+
+        <p class="text-gray-500 text-xs mt-2">
+          Inclusive of listed product price.
+        </p>
+
+        <!-- STOCK -->
+        <div class="mt-6">
+
+          <span
+            *ngIf="product.stock > 0"
+            class="inline-flex items-center gap-2
+                   text-green-400 text-sm font-medium">
+
+            <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+
+            In Stock — {{ product.stock }} available
+
+          </span>
+
+          <span
+            *ngIf="product.stock <= 0"
+            class="inline-flex items-center gap-2
+                   text-red-400 text-sm font-medium">
+
+            <span class="w-2 h-2 bg-red-400 rounded-full"></span>
+
+            Currently Out of Stock
+
+          </span>
+
+        </div>
+
+        <!-- COLOR -->
+        <div
+          *ngIf="product.color"
+          class="flex items-center gap-3 mt-5">
+
+          <span class="text-gray-400 text-sm">Color:</span>
+
+          <span
+            class="w-6 h-6 rounded-full border border-gray-600"
+            [ngStyle]="{'background-color': product.color}">
+          </span>
+
+          <span class="text-gray-200 text-sm">
+            {{ product.color }}
+          </span>
+
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="mt-7">
+
+          <h2 class="text-lg font-semibold text-white mb-3">
+            Product Description
+          </h2>
+
+          <p
+            class="text-gray-400 text-sm sm:text-base
+                   leading-7 whitespace-pre-line break-words">
+
+            {{ product.description || 'No product description is available yet.' }}
+
+          </p>
+
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="border-t border-gray-800 my-7"></div>
+
+        <!-- QUANTITY -->
+        <div class="flex items-center justify-between gap-4">
+
+          <span class="text-gray-300 font-medium">
+            Quantity
+          </span>
+
+          <div
+            class="flex items-center border border-gray-700
+                   rounded-lg overflow-hidden bg-[#111111]">
+
+            <button
+              type="button"
+              (click)="decreaseQuantity()"
+              [disabled]="getCartQuantity() <= 1"
+              class="w-11 h-11 hover:bg-[#d4af37]
+                     hover:text-black transition
+                     disabled:opacity-40 disabled:cursor-not-allowed">
+
+              <i class="fa-solid fa-minus"></i>
+
+            </button>
+
+            <span class="w-12 text-center font-semibold">
+              {{ getCartQuantity() > 0 ? getCartQuantity() : 1 }}
+            </span>
+
+            <button
+              type="button"
+              (click)="increaseQuantity()"
+              [disabled]="getCartQuantity() <= 0 ||
+                          getCartQuantity() >= product.stock"
+              class="w-11 h-11 hover:bg-[#d4af37]
+                     hover:text-black transition
+                     disabled:opacity-40 disabled:cursor-not-allowed">
+
+              <i class="fa-solid fa-plus"></i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- ADD TO CART + WISHLIST -->
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 mt-6">
+
+          <button
+            *ngIf="getCartQuantity() === 0"
+            type="button"
+            (click)="addToCart()"
+            [disabled]="product.stock <= 0"
+            class="sm:col-span-3 py-4 rounded-xl
+                   bg-[#d4af37] text-black font-bold
+                   hover:bg-[#e8c84d] transition
+                   disabled:opacity-40 disabled:cursor-not-allowed">
+
+            <i class="fa-solid fa-cart-shopping mr-2"></i>
+
+            {{ product.stock > 0 ? 'Add To Cart' : 'Out of Stock' }}
+
+          </button>
+
+          <button
+            *ngIf="getCartQuantity() > 0"
+            type="button"
+            class="sm:col-span-3 py-4 rounded-xl
+                   border border-[#d4af37]
+                   text-[#d4af37] font-bold">
+
+            <i class="fa-solid fa-check mr-2"></i>
+
+            Added to Cart ({{ getCartQuantity() }})
+
+          </button>
+
+          <button
+            type="button"
+            (click)="toggleWishlist()"
+            class="sm:col-span-2 py-4 rounded-xl
+                   border border-gray-700
+                   hover:border-[#d4af37]
+                   hover:bg-[#1b1b1b] transition font-semibold">
+
+            <i
+              class="fa-heart mr-2"
+              [ngClass]="product.isFavourite
+                ? 'fa-solid text-red-500'
+                : 'fa-regular text-white'">
+            </i>
+
+            {{ product.isFavourite ? 'Wishlisted' : 'Wishlist' }}
+
+          </button>
+
+        </div>
+
+        <!-- PRODUCT ID -->
+        <p
+          *ngIf="product._id"
+          class="text-gray-600 text-xs mt-5 break-all">
+
+          Product ID: {{ product._id }}
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SUGGESTED PRODUCTS -->
+    <!-- ============================================== -->
+
+    <section class="mt-16 sm:mt-24">
+
+      <div
+        class="flex flex-col sm:flex-row sm:items-end
+               justify-between gap-3 mb-7">
+
+        <div>
+          <p
+            class="text-[#d4af37] uppercase
+                   tracking-[0.25em] text-xs font-semibold">
+
+            Curated for you
+
+          </p>
+
+          <h2 class="text-2xl sm:text-3xl font-bold mt-2">
+            You May Also Like
+          </h2>
+
+          <p class="text-gray-500 text-sm mt-2">
+            Explore more products from NiruStore.
+          </p>
+        </div>
+
+      </div>
+
+      <div
+        *ngIf="suggestedProducts.length > 0"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+
+        <article
+          *ngFor="let item of suggestedProducts"
+          class="group min-w-0 overflow-hidden
+                 rounded-xl border border-gray-800
+                 bg-[#111111] hover:border-[#d4af37]
+                 transition duration-300">
+
+          <!-- SUGGESTED IMAGE -->
+          <button
+            type="button"
+            (click)="openProduct(item)"
+            class="block w-full overflow-hidden text-left">
+
+            <div class="relative overflow-hidden">
+
+              <img
+                [src]="item.image"
+                [alt]="item.productName"
+                class="w-full h-40 sm:h-56 object-cover
+                       group-hover:scale-105 transition duration-500">
+
+              <span
+                *ngIf="item.badge"
+                class="absolute top-2 left-2 bg-red-500
+                       text-white text-[10px] sm:text-xs
+                       px-2 py-1 rounded-full">
+
+                {{ item.badge }}
+
+              </span>
+
+            </div>
+
+          </button>
+
+          <!-- SUGGESTED DETAILS -->
+          <div class="p-3 sm:p-4">
+
+            <p class="text-gray-500 text-xs uppercase truncate">
+              {{ item.brand }}
+            </p>
+
+            <button
+              type="button"
+              (click)="openProduct(item)"
+              class="block text-left mt-2 text-sm sm:text-base
+                     font-semibold text-white
+                     hover:text-[#d4af37] transition
+                     line-clamp-2">
+
+              {{ item.productName }}
+
+            </button>
+
+            <div class="flex flex-wrap items-center gap-2 mt-3">
+
+              <span class="font-bold text-white">
+                ₹{{ item.discountPrice | number:'1.0-2' }}
+              </span>
+
+              <span
+                *ngIf="item.discountPrice < item.price"
+                class="text-gray-500 text-xs line-through">
+
+                ₹{{ item.price | number:'1.0-2' }}
+
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              (click)="openProduct(item)"
+              class="w-full mt-4 py-2.5 rounded-lg
+                     border border-gray-700 text-gray-200
+                     text-xs sm:text-sm font-semibold
+                     hover:bg-[#d4af37] hover:text-black
+                     hover:border-[#d4af37] transition">
+
+              View Product
+
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <div
+        *ngIf="suggestedProducts.length === 0"
+        class="border border-gray-800 rounded-xl p-8 text-center">
+
+        <i class="fa-solid fa-box-open text-3xl text-gray-600"></i>
+
+        <p class="text-gray-400 mt-4">
+          No other products are available yet.
+        </p>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
+
+<!-- ERROR / PRODUCT NOT FOUND -->
+<section
+  *ngIf="!loading && !product"
+  class="min-h-screen bg-[#0b0b0b] text-white
+         flex items-center justify-center px-5">
+
+  <div class="text-center max-w-md">
+
+    <i class="fa-solid fa-box-open text-5xl text-[#d4af37]"></i>
+
+    <h2 class="text-2xl font-bold mt-5">
+      Product Not Found
+    </h2>
+
+    <p class="text-gray-400 mt-3">
+      {{ errorMessage || 'This product is no longer available.' }}
+    </p>
+
+    <button
+      type="button"
+      (click)="goBack()"
+      class="mt-7 px-7 py-3 rounded-lg
+             bg-[#d4af37] text-black font-semibold
+             hover:bg-[#e8c84d] transition">
+
+      <i class="fa-solid fa-arrow-left mr-2"></i>
+      Back to Shop
+
+    </button>
+
+  </div>
+
+</section>

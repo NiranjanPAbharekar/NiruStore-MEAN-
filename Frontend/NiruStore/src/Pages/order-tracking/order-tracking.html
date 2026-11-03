@@ -1,0 +1,462 @@
+
+<div class="min-h-screen bg-gray-50 px-4 py-12">
+  <div class="mx-auto max-w-5xl">
+
+    <!-- ================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================== -->
+
+    <div class="text-center">
+      <h1 class="text-3xl font-semibold text-gray-800">
+        Order Tracking
+      </h1>
+
+      <p class="mt-2 text-sm text-gray-500">
+        Track your order and view your purchased products.
+      </p>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SEARCH ORDER -->
+    <!-- ================================================== -->
+
+    <div class="mx-auto mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row">
+
+      <input
+        [(ngModel)]="orderId"
+        type="text"
+        placeholder="Enter your Order ID"
+        (keyup.enter)="trackOrder()"
+        class="h-12 flex-1 rounded-lg border border-gray-200 bg-white px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"
+      />
+
+      <button
+        type="button"
+        (click)="trackOrder()"
+        [disabled]="loading"
+        class="h-12 rounded-lg bg-[#c89b3c] px-7 text-sm font-medium text-white transition hover:bg-[#b58a32] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {{ loading ? 'Searching...' : 'Track Order' }}
+      </button>
+
+    </div>
+
+    <!-- ================================================== -->
+    <!-- LOADING -->
+    <!-- ================================================== -->
+
+    <!-- @if (loading) {
+      <div class="mx-auto mt-8 max-w-2xl rounded-lg border border-gray-100 bg-white p-6 text-center shadow-sm">
+        <div class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-[#c89b3c]"></div>
+
+        <p class="mt-4 text-sm text-gray-600">
+          Loading your order details...
+        </p>
+      </div>
+    } -->
+
+
+
+
+
+  @if (loading) {
+    <div class="mx-auto mt-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-[#c89b3c]"></div>
+    <p class="mt-2">Loading your order details...</p>
+  }
+
+    <!-- ================================================== -->
+    <!-- ERROR MESSAGE -->
+    <!-- ================================================== -->
+
+    @if (errorMessage) {
+      <div class="mx-auto mt-5 max-w-2xl rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <!-- ================================================== -->
+    <!-- ORDER DETAILS -->
+    <!-- ================================================== -->
+
+    @if (showOrder && order; as currentOrder) {
+
+      <div class="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+        <!-- ORDER HEADER -->
+
+        <div class="flex flex-col gap-4 border-b border-gray-100 p-6 sm:flex-row sm:items-center sm:justify-between">
+
+          <div class="min-w-0">
+            <p class="text-xs text-gray-400">
+              Order ID
+            </p>
+
+            <h2 class="mt-1 break-all text-lg font-semibold text-gray-800">
+              {{ currentOrder.orderId || currentOrder.orderNumber || currentOrder._id }}
+            </h2>
+
+            <p class="mt-2 text-xs text-gray-500">
+              Placed on
+              @if (currentOrder.createdAt) {
+                {{ currentOrder.createdAt | date:'mediumDate' }}
+              } @else {
+                Date not available
+              }
+            </p>
+          </div>
+
+          <span
+            class="w-fit rounded-full px-4 py-2 text-xs font-semibold"
+            [ngClass]="{
+              'bg-green-50 text-green-700': currentOrder.status?.toLowerCase() === 'delivered',
+              'bg-red-50 text-red-700': ['cancelled', 'canceled', 'refunded'].includes((currentOrder.status || '').toLowerCase()),
+              'bg-amber-50 text-amber-700': !['delivered', 'cancelled', 'canceled', 'refunded'].includes((currentOrder.status || '').toLowerCase())
+            }"
+          >
+            {{ currentOrder.status || 'Order Placed' }}
+          </span>
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ORDER PROGRESS -->
+        <!-- ============================================== -->
+
+        <div class="border-b border-gray-100 p-6 sm:p-10">
+
+          <h3 class="mb-8 text-base font-semibold text-gray-800">
+            Order Progress
+          </h3>
+
+          @if (getStepIndex() === -1) {
+
+            <div class="rounded-lg bg-red-50 p-4 text-center text-sm font-medium text-red-700">
+              This order has been cancelled or refunded.
+            </div>
+
+          } @else {
+
+            <div class="grid grid-cols-2 gap-6 sm:grid-cols-4">
+
+              @for (step of steps; track step; let i = $index) {
+
+                <div class="text-center">
+
+                  <div
+                    class="mx-auto flex h-10 w-10 items-center justify-center rounded-full font-semibold"
+                    [ngClass]="{
+                      'bg-[#c89b3c] text-white': getStepIndex() >= i,
+                      'border-2 border-gray-200 bg-white text-gray-400': getStepIndex() < i
+                    }"
+                  >
+                    @if (getStepIndex() >= i) {
+                      ✓
+                    } @else {
+                      {{ i + 1 }}
+                    }
+                  </div>
+
+                  <p
+                    class="mt-3 text-sm"
+                    [ngClass]="{
+                      'font-semibold text-gray-800': getStepIndex() >= i,
+                      'text-gray-400': getStepIndex() < i
+                    }"
+                  >
+                    {{ step }}
+                  </p>
+
+                </div>
+
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- CUSTOMER DETAILS -->
+        <!-- ============================================== -->
+
+        <div class="grid grid-cols-1 gap-6 border-b border-gray-100 p-6 sm:grid-cols-3">
+
+          <div>
+            <p class="text-xs text-gray-400">
+              Customer
+            </p>
+
+            <p class="mt-2 break-words text-sm font-medium text-gray-700">
+              {{ customerName }}
+            </p>
+          </div>
+
+          <div>
+            <p class="text-xs text-gray-400">
+              Phone
+            </p>
+
+            <p class="mt-2 text-sm font-medium text-gray-700">
+              {{ customerPhone }}
+            </p>
+          </div>
+
+          <div>
+            <p class="text-xs text-gray-400">
+              Payment Method
+            </p>
+
+            <p class="mt-2 text-sm font-medium uppercase text-gray-700">
+              {{ currentOrder.paymentMethod || 'N/A' }}
+            </p>
+          </div>
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- DELIVERY ADDRESS -->
+        <!-- ============================================== -->
+
+        <div class="border-b border-gray-100 p-6">
+
+          <h3 class="text-base font-semibold text-gray-800">
+            Delivery Address
+          </h3>
+
+          <p class="mt-3 text-sm leading-6 text-gray-600">
+            {{ formattedAddress || 'Address not available' }}
+          </p>
+
+          @if (deliveryAddress.email) {
+            <p class="mt-2 text-sm text-gray-500">
+              Email: {{ deliveryAddress.email }}
+            </p>
+          }
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ORDERED PRODUCTS -->
+        <!-- ============================================== -->
+
+        <div class="border-b border-gray-100 p-6">
+
+          <h3 class="mb-5 text-lg font-semibold text-gray-800">
+            Ordered Products ({{ currentOrder.items?.length || 0 }})
+          </h3>
+
+          @if (currentOrder.items?.length) {
+
+            <div class="space-y-4">
+
+              @for (item of currentOrder.items; track item._id || item.id || $index) {
+
+                <div class="flex flex-col gap-4 rounded-xl border border-gray-100 p-4 sm:flex-row sm:items-center">
+
+                  <!-- PRODUCT IMAGE -->
+
+                  <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-50">
+
+                    @if (item.image || item.productImage) {
+
+                      <img
+                        [src]="item.image || item.productImage"
+                        [alt]="item.name || item.productName || 'Product'"
+                        class="h-full w-full object-contain"
+                        loading="lazy"
+                      />
+
+                    } @else {
+
+                      <span class="text-xs text-gray-400">
+                        No image
+                      </span>
+
+                    }
+
+                  </div>
+
+                  <!-- PRODUCT INFORMATION -->
+
+                  <div class="min-w-0 flex-1">
+
+                    <h4 class="break-words font-semibold text-gray-800">
+                      {{ item.name || item.productName || 'Product' }}
+                    </h4>
+
+                    @if (item.brand) {
+                      <p class="mt-1 text-xs text-gray-500">
+                        Brand: {{ item.brand }}
+                      </p>
+                    }
+
+                    <p class="mt-2 text-sm text-gray-500">
+                      Price:
+                      {{ (item.price || 0) | currency:'INR':'symbol':'1.2-2':'en-IN' }}
+                    </p>
+
+                    <p class="mt-1 text-sm text-gray-500">
+                      Quantity: {{ item.quantity || 1 }}
+                    </p>
+
+                  </div>
+
+                  <!-- ITEM SUBTOTAL -->
+
+                  <div class="text-left sm:text-right">
+
+                    <p class="text-xs text-gray-400">
+                      Subtotal
+                    </p>
+
+                    <p class="mt-1 font-semibold text-gray-800">
+                      {{
+                        ((item.price || 0) * (item.quantity || 1))
+                          | currency:'INR':'symbol':'1.2-2':'en-IN'
+                      }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+          } @else {
+
+            <p class="rounded-lg bg-gray-50 p-4 text-sm text-gray-500">
+              No product details were saved with this order.
+            </p>
+
+          }
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ORDER SUMMARY -->
+        <!-- ============================================== -->
+
+        <div class="bg-gray-50 p-6">
+
+          <h3 class="mb-5 text-lg font-semibold text-gray-800">
+            Order Summary
+          </h3>
+
+          <div class="ml-auto max-w-sm space-y-3">
+
+            <div class="flex justify-between text-sm text-gray-600">
+              <span>Items</span>
+              <span>{{ currentOrder.items?.length || 0 }}</span>
+            </div>
+
+            @if (currentOrder.subtotal !== undefined) {
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Subtotal</span>
+                <span>
+                  {{ currentOrder.subtotal | currency:'INR':'symbol':'1.2-2':'en-IN' }}
+                </span>
+              </div>
+            }
+
+            @if (currentOrder.discount) {
+              <div class="flex justify-between text-sm text-green-700">
+                <span>Discount</span>
+                <span>
+                  -{{ currentOrder.discount | currency:'INR':'symbol':'1.2-2':'en-IN' }}
+                </span>
+              </div>
+            }
+
+            @if (currentOrder.shipping) {
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Shipping</span>
+                <span>
+                  {{ currentOrder.shipping | currency:'INR':'symbol':'1.2-2':'en-IN' }}
+                </span>
+              </div>
+            }
+
+            @if (currentOrder.tax) {
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>Tax</span>
+                <span>
+                  {{ currentOrder.tax | currency:'INR':'symbol':'1.2-2':'en-IN' }}
+                </span>
+              </div>
+            }
+
+            <div class="flex justify-between border-t border-gray-200 pt-4">
+
+              <span class="font-semibold text-gray-800">
+                Order Total
+              </span>
+
+              <span class="text-xl font-bold text-[#b58a32]">
+                {{
+                  (
+                    currentOrder.totalAmount ??
+                    currentOrder.total ??
+                    orderTotal
+                  ) | currency:'INR':'symbol':'1.2-2':'en-IN'
+                }}
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ACTIONS -->
+        <!-- ============================================== -->
+
+        <div class="flex flex-col gap-3 border-t border-gray-100 p-6 sm:flex-row sm:justify-end">
+
+          <button
+            type="button"
+            (click)="refreshOrder()"
+            [disabled]="loading"
+            class="rounded-lg border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
+          >
+            Refresh Order
+          </button>
+
+          <a
+            routerLink="/Shop"
+            class="rounded-lg bg-[#c89b3c] px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-[#b58a32]"
+          >
+            Continue Shopping
+          </a>
+
+        </div>
+
+      </div>
+
+    }
+
+    <!-- ================================================== -->
+    <!-- EMPTY STATE -->
+    <!-- ================================================== -->
+
+    @if (!loading && !showOrder && !errorMessage) {
+
+      <div class="mx-auto mt-8 max-w-2xl rounded-xl border border-gray-100 bg-white p-8 text-center shadow-sm">
+
+        <h3 class="text-lg font-semibold text-gray-800">
+          Track Your Order
+        </h3>
+
+        <p class="mt-2 text-sm leading-6 text-gray-500">
+          Enter your order ID above to see your order status, delivery address, purchased products, and total amount.
+        </p>
+
+      </div>
+
+    }
+
+  </div>
+</div>

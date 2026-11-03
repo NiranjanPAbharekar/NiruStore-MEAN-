@@ -1,0 +1,437 @@
+
+<section class=" min-h-screen py-10">
+
+  <div class="max-w-7xl mx-auto px-4">
+    <section
+  *ngIf="cartItems.length < 1; else cartContent"
+  class="min-h-screen flex items-center justify-center px-4 py-16">
+
+  <div class="max-w-lg w-full text-center bg-white rounded-2xl border border-gray-200 shadow-sm p-8 md:p-12">
+
+    <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-yellow-50">
+      <i class="fa-solid fa-bag-shopping text-4xl text-[#d4af37]"></i>
+    </div>
+
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+      Your Cart Is Empty
+    </h1>
+
+    <p class="text-gray-500 leading-relaxed mb-8">
+      You don't have any items in your cart. Please shop and discover
+      something you love!
+    </p>
+
+    <button
+      type="button"
+      routerLink="/Shop"
+      class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#d4af37] px-8 py-3.5 font-bold text-black transition hover:bg-[#c29a24]">
+
+      <i class="fa-solid fa-store"></i>
+      SHOP NOW
+
+    </button>
+
+  </div>
+
+</section>
+<ng-template #cartContent>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+
+      <!-- ===================== -->
+      <!-- LEFT SIDE -->
+      <!-- ===================== -->
+
+      <div class="flex-1">
+
+        <!-- Header -->
+
+        <div class="flex justify-between items-center mb-6">
+
+          <h1 class="text-3xl font-bold text-gray-900">
+            Shopping Cart
+            <span class="text-lg font-normal text-gray-500">
+              ({{cartItems.length}} Items)
+            </span>
+          </h1>
+
+          <button
+            routerLink="/products"
+            class="text-[#d4af37] hover:underline font-medium">
+
+            Continue Shopping
+
+          </button>
+
+        </div>
+
+        <!-- ===================== -->
+        <!-- TABLE HEADER -->
+        <!-- ===================== -->
+
+        <div
+          class="hidden md:grid grid-cols-12 bg-white rounded-t-xl px-6 py-4 font-semibold text-gray-500 border">
+
+          <div class="col-span-5">
+            PRODUCT
+          </div>
+
+          <div class="col-span-2 text-center">
+            PRICE
+          </div>
+
+          <div class="col-span-2 text-center">
+            QUANTITY
+          </div>
+
+          <div class="col-span-2 text-center">
+            TOTAL
+          </div>
+
+          <div class="col-span-1"></div>
+
+        </div>
+
+        <!-- ===================== -->
+        <!-- CART ITEMS -->
+        <!-- ===================== -->
+
+        <div
+          *ngFor="let item of cartItems"
+          class="bg-white border-x border-b last:rounded-b-xl p-6">
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+
+            <!-- Product -->
+
+            <div class="md:col-span-5 flex gap-4">
+
+              <img
+                [src]="item.image"
+                [alt]="item.productName"
+                class="w-24 h-24 rounded-lg object-cover border">
+
+              <div>
+
+                <h2 class="font-semibold text-lg text-gray-900">
+                  {{item.productName}}
+                </h2>
+
+                <p class="text-gray-500 mt-1">
+                  {{item.brand }}
+                </p>
+
+                <p
+                  class="mt-2 text-sm"
+                  [ngClass]="item.stock ? 'text-green-600' : 'text-red-500'">
+
+                  {{item.stock ? 'In Stock' : 'Out Of Stock'}}
+
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- Price -->
+
+            <div class="md:col-span-2 text-center">
+
+              <span class="font-semibold text-lg">
+
+                ₹{{item.price | number}}
+
+              </span>
+
+            </div>
+
+            <!-- Quantity -->
+
+            <div class="md:col-span-2">
+
+              <div
+                class="flex justify-center items-center border rounded-lg overflow-hidden w-fit mx-auto">
+
+                <button
+                  (click)="decreaseQty(item)"
+                  class="w-10 h-10 hover:bg-gray-100">
+
+                  -
+
+                </button>
+
+                <span
+                  class="w-12 text-center font-semibold">
+
+                  {{item.quantity}}
+
+                </span>
+
+                <button
+                  (click)="increaseQty(item)"
+                  class="w-10 h-10 hover:bg-gray-100">
+
+                  +
+
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- Total -->
+
+            <div class="md:col-span-2 text-center">
+
+              <span class="font-bold text-lg">
+
+                ₹{{item.price * item.quantity | number}}
+
+              </span>
+
+            </div>
+
+            <!-- Delete -->
+
+            <div class="md:col-span-1 flex justify-center">
+
+              <button
+                (click)="removeItem(item._id)"
+                class="text-red-500 hover:text-red-700 text-xl">
+
+                <i class="fa-solid fa-xmark"></i>
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+             <!-- ===================== -->
+        <!-- COUPON SECTION -->
+        <!-- ===================== -->
+
+        <div class="mt-8 bg-white rounded-xl border p-6">
+
+          <h3 class="text-lg font-semibold mb-4">
+            Apply Coupon Code
+          </h3>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+
+            <input
+              type="text"
+              [(ngModel)]="couponCode"
+              placeholder="Enter coupon code"
+              class="flex-1 border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-yellow-500">
+
+            <button
+              (click)="applyCoupon()"
+              class="bg-black text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition">
+
+              APPLY
+
+            </button>
+
+          </div>
+
+          <p
+            *ngIf="couponMessage"
+            class="mt-4 text-green-600 font-medium">
+
+            {{couponMessage}}
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+
+
+      <!-- ===================== -->
+      <!-- CART SUMMARY -->
+      <!-- ===================== -->
+
+      <div class="lg:w-[380px]">
+
+        <div class="bg-white rounded-xl border p-6 sticky top-24">
+
+          <h2
+            class="text-2xl font-bold mb-6">
+
+            Cart Summary
+
+          </h2>
+
+
+
+
+
+          <div class="space-y-4">
+
+            <div class="flex justify-between">
+
+              <span class="text-gray-500">
+
+                Subtotal
+
+              </span>
+
+              <span>
+
+                ₹{{subtotal | number}}
+
+              </span>
+
+            </div>
+
+
+
+
+
+            <div class="flex justify-between">
+
+              <span class="text-gray-500">
+
+                Discount
+
+              </span>
+
+              <span class="text-red-500">
+
+                -₹{{discount | number}}
+
+              </span>
+
+            </div>
+
+
+
+
+
+            <div class="flex justify-between">
+
+              <span class="text-gray-500">
+
+                Shipping
+
+              </span>
+
+              <span class="text-green-600 font-semibold">
+
+                FREE
+
+              </span>
+
+            </div>
+
+
+
+
+
+            <div class="flex justify-between">
+
+              <span class="text-gray-500">
+
+                Tax (18%)
+
+              </span>
+
+              <span>
+
+                ₹{{tax | number}}
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+
+
+          <hr class="my-6">
+
+
+
+
+
+          <div
+            class="flex justify-between text-2xl font-bold">
+
+            <span>Total</span>
+
+            <span>
+
+              ₹{{grandTotal | number}}
+
+            </span>
+
+          </div>
+
+
+
+
+
+          <button routerLink="/checkout"
+            class="mt-8 w-full bg-[#d4af37] hover:bg-yellow-500 text-black font-bold py-4 rounded-lg transition">
+
+            PROCEED TO CHECKOUT
+
+          </button>
+
+
+
+
+
+          <div class="mt-8">
+
+            <p
+              class="text-gray-500 mb-4">
+
+              We Accept
+
+            </p>
+
+
+
+
+
+            <div
+              class="flex gap-4 items-center flex-wrap">
+
+              <img
+                src="assets/payment/visa.jpg"
+                class="h-8 w-16">
+
+              <img
+                src="assets/payment/cod.jpg"
+                class="h-8 w-16">
+
+              <img
+                src="assets/payment/upi.png"
+                class="h-8 w-16">
+
+            
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+</ng-template>
+
+  </div>
+
+</section>

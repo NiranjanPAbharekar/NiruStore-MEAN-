@@ -1,0 +1,463 @@
+
+<div class="min-h-screen bg-[#ffffff] p-4 text-white sm:p-6 lg:p-8">
+
+  <!-- PAGE HEADER -->
+  <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h1 class="text-2xl font-bold tracking-wide text-[#d4af37] sm:text-3xl">
+        User Management
+      </h1>
+
+      <p class="mt-2 text-sm text-gray-400">
+        Manage and view your registered NiruStore customers.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="loadUsers()"
+      [disabled]="isLoading"
+      class="rounded-lg border border-[#d4af37] px-5 py-3 text-sm font-semibold text-[#d4af37] transition hover:bg-[#d4af37] hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {{ isLoading ? 'Loading...' : 'Refresh Users' }}
+    </button>
+  </div>
+
+  <!-- SUMMARY CARD -->
+  <!-- <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+    <div class="rounded-2xl border border-gray-800 bg-white p-5">
+      <p class="text-sm text-gray-400">Total Registered Users</p>
+
+      <div class="mt-3 flex items-center justify-between">
+        <h2 class="text-3xl font-bold text-white">
+          {{ users.length }}
+        </h2>
+
+        <div class="rounded-xl bg-[#d4af37]/10 p-3 text-[#d4af37]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="10" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-gray-800 bg-white p-5">
+      <p class="text-sm text-gray-400">Search Results</p>
+
+      <div class="mt-3 flex items-center justify-between">
+        <h2 class="text-3xl font-bold text-[#d4af37]">
+          {{ filteredUsers.length }}
+        </h2>
+
+        <div class="rounded-xl bg-[#d4af37]/10 p-3 text-[#d4af37]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div> -->
+
+  <!-- SEARCH AND FILTER -->
+  <div class="mb-6 rounded-2xl border border-gray-800 bg-white p-4 sm:p-6">
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+      <div class="md:col-span-2">
+        <label
+          for="userSearch"
+          class="mb-2 block text-sm font-medium text-gray-700"
+        >
+          Search Users
+        </label>
+
+        <div class="relative">
+          <input
+            id="userSearch"
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilters()"
+            placeholder="Search by name, email, phone or ID..."
+            class="w-full rounded-xl border border-gray-700 bg-white px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-[#d4af37]"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="userStatus"
+          class="mb-2 block text-sm font-medium text-gray-700"
+        >
+          Filter by Status
+        </label>
+
+        <select
+          id="userStatus"
+          [(ngModel)]="selectedStatus"
+          (ngModelChange)="applyFilters()"
+          class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10 "
+        >
+          <option value="all">All Users</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ERROR MESSAGE -->
+  @if (errorMessage) {
+    <div class="mb-5 rounded-xl border border-red-800 bg-red-950/40 p-4 text-sm text-red-300">
+      {{ errorMessage }}
+
+      <button
+        type="button"
+        (click)="loadUsers()"
+        class="ml-2 font-semibold underline"
+      >
+        Try Again
+      </button>
+    </div>
+  }
+
+  <!-- SUCCESS MESSAGE -->
+  @if (successMessage) {
+    <div class="mb-5 rounded-xl border border-green-800 bg-green-950/30 p-4 text-sm text-green-300">
+      {{ successMessage }}
+    </div>
+  }
+
+  <!-- TABLE CONTAINER -->
+  <div class="overflow-hidden  bg-white">
+
+    <!-- TABLE HEADER -->
+    <!-- <div class="flex flex-col justify-between gap-2 border-b border-gray-800 p-5 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-lg font-semibold text-white">
+          Registered Customers
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-400">
+          Customer account information
+        </p>
+      </div>
+
+      <span class="text-sm text-gray-400">
+        Showing {{ startItem }}–{{ endItem }} of {{ filteredUsers.length }}
+      </span>
+    </div> -->
+
+    <!-- LOADING STATE -->
+   @if (isLoading) {
+  <div class="flex flex-col items-center justify-center gap-4 p-14">
+    <div
+      class="h-10 w-10 animate-spin rounded-full border-4 border-gray-700 border-t-[#d4af37]"
+    ></div>
+
+    <p class="text-sm text-gray-400">
+      Loading registered users...
+    </p>
+  </div>
+} @else {
+
+      <!-- RESPONSIVE TABLE -->
+      <div class="w-full ">
+
+        <table class="w-full   text-left text-sm">
+
+          <thead class="bg-gray-50 ">
+            <tr class="border-b border-gray-100">
+              <th class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">User ID</th>
+              <th class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Customer</th>
+              <th class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Email</th>
+              <!-- <th class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Phone</th> -->
+              <th class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Joined</th>
+              <th class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Status</th>
+              <th class="px-3 py-4 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-800">
+
+            @for (user of paginatedUsers; track user._id) {
+
+              <tr class="transition ">
+
+                <!-- USER ID -->
+                <td class="px-3 py-3">
+                  <span
+                    class="font-mono text-xs text-gray-400"
+                    [title]="user._id"
+                  >
+                    {{ user._id }}
+                  </span>
+                </td>
+
+                <!-- CUSTOMER -->
+                <td class="px-3 py-3">
+                  <div class="flex items-center gap-3">
+
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 font-semibold text-[#d4af37]">
+                      {{ getInitials(user.name) }}
+                    </div>
+
+                    <div class="min-w-0">
+                      <p class="max-w-[220px] truncate font-semibold text-black">
+                        {{ user.name }}
+                      </p>
+
+                      <p class="mt-1 text-xs text-gray-500">
+                        Customer
+                      </p>
+                    </div>
+
+                  </div>
+                </td>
+
+                <!-- EMAIL -->
+                <td class="px-3 py-3">
+                  <span class="text-gray-700">
+                    {{ user.email }}
+                  </span>
+                </td>
+
+                <!-- PHONE -->
+                <!-- <td class="px-3 py-3">
+                  <span class="text-gray-300">
+                    {{ user.phone || '—' }}
+                  </span>
+                </td> -->
+
+                <!-- JOINED DATE -->
+                <td class="px-3 py-3">
+                  <span class="whitespace-nowrap text-gray-700">
+                    {{ user.createdAt ? (user.createdAt | date:'dd MMM yyyy') : '—' }}
+                  </span>
+                </td>
+
+                <!-- STATUS -->
+                <td class="px-3 py-3">
+                  <span
+                    class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium"
+                    [ngClass]="getStatusClass(user.status)"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+                    {{ user.status || 'Active' }}
+                  </span>
+                </td>
+
+                <!-- ACTIONS -->
+     <td class="whitespace-nowrap px-5 py-4">
+  <div class="flex items-center justify-center gap-2">
+
+    <!-- VIEW -->
+    <button
+      type="button"
+      (click)="viewUser(user)"
+      title="View user"
+      aria-label="View user"
+      class="flex h-9 w-9 items-center justify-center rounded-lg
+             border border-gray-200 bg-white text-blue-600
+             transition hover:border-blue-200 hover:bg-blue-50">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 12s3.5-7 9.75-7 9.75 7 9.75 7-3.5 7-9.75 7-9.75-7-9.75-7z"/>
+
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    </button>
+
+    <!-- EDIT -->
+    <button
+      type="button"
+      (click)="editUser(user)"
+      title="Edit user"
+      aria-label="Edit user"
+      class="flex h-9 w-9 items-center justify-center rounded-lg
+             border border-gray-200 bg-white text-amber-600
+             transition hover:border-amber-200 hover:bg-amber-50">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m16.862 4.487 2.651 2.651M7.5 20.25H3.75V16.5L15.9 4.35a2.652 2.652 0 0 1 3.75 3.75L7.5 20.25z"/>
+      </svg>
+    </button>
+
+    <!-- DELETE -->
+    <button
+      type="button"
+      (click)="deleteUser(user)"
+      title="Delete user"
+      aria-label="Delete user"
+      class="flex h-9 w-9 items-center justify-center rounded-lg
+             border border-gray-200 bg-white text-red-600
+             transition hover:border-red-200 hover:bg-red-50">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.8">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 10v6m4-6v6"/>
+      </svg>
+    </button>
+
+  </div>
+</td>
+
+              </tr>
+
+            } @empty {
+
+              <tr>
+                <td colspan="7" class="px-5 py-16 text-center">
+
+                  <div class="mx-auto max-w-sm">
+                    <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-800 text-gray-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      >
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                      </svg>
+                    </div>
+
+                    <h3 class="font-semibold text-white">
+                      No users found
+                    </h3>
+
+                    <p class="mt-2 text-sm text-gray-400">
+                      No users match your current search or status filter.
+                    </p>
+
+                    <button
+                      type="button"
+                      (click)="searchTerm = ''; selectedStatus = 'all'; applyFilters()"
+                      class="mt-4 text-sm font-semibold text-[#d4af37] hover:underline"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+
+                </td>
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="flex flex-col items-center justify-between gap-4 border-t border-gray-800 p-4 sm:flex-row sm:px-6">
+
+        <p class="text-sm text-gray-600">
+          Showing
+          <span class="font-semibold text-gray-600">{{ startItem }}</span>
+          to
+          <span class="font-semibold text-gray-600">{{ endItem }}</span>
+          of
+          <span class="font-semibold text-gray-600">{{ filteredUsers.length }}</span>
+          users
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-2">
+
+          <button
+            type="button"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+            class="rounded-lg border border-gray-700 px-3 py-2 text-sm text-gray-300 transition hover:border-[#d4af37] hover:text-[#d4af37] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Previous
+          </button>
+
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              (click)="goToPage(page)"
+              [class.bg-[#d4af37]]="currentPage === page"
+              [class.text-black]="currentPage === page"
+              [class.border-[#d4af37]]="currentPage === page"
+              [class.border-gray-700]="currentPage !== page"
+              [class.text-gray-300]="currentPage !== page"
+              class="min-w-10 rounded-lg border px-3 py-2 text-sm transition hover:border-[#d4af37]"
+            >
+              {{ page }}
+            </button>
+          }
+
+          <button
+            type="button"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+            class="rounded-lg border border-gray-700 px-3 py-2 text-sm text-gray-300 transition hover:border-[#d4af37] hover:text-[#d4af37] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Next
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

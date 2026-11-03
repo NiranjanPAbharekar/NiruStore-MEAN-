@@ -1,0 +1,145 @@
+ <div class="min-h-screen bg-[#090909] text-white flex items-center justify-center px-4 py-10">
+
+  <div class="w-full max-w-md">
+
+    <!-- BRAND -->
+    <div class="text-center mb-8">
+      <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#c89b3c]/50 bg-[#c89b3c]/10">
+        <span class="text-3xl font-bold text-[#d4af37]">N</span>
+      </div>
+
+      <h1 class="text-3xl font-bold tracking-[0.18em]">
+        NIRUSTORE
+      </h1>
+
+      <p class="mt-2 text-sm tracking-widest text-gray-400">
+        ADMINISTRATION PORTAL
+      </p>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <div class="rounded-2xl border border-gray-800 bg-[#111111] p-6 shadow-2xl sm:p-8">
+
+      <div class="mb-7">
+        <h2 class="text-2xl font-semibold">
+          Admin Login
+        </h2>
+
+        <p class="mt-2 text-sm text-gray-400">
+          Sign in to manage your NiruStore dashboard.
+        </p>
+      </div>
+
+      <!-- ERROR MESSAGE -->
+      <div
+        *ngIf="errorMessage"
+        class="mb-5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300"
+        role="alert"
+      >
+        {{ errorMessage }}
+      </div>
+
+      <form
+        #loginForm="ngForm"
+        (ngSubmit)="onLogin()"
+        class="space-y-5"
+      >
+
+        <!-- EMAIL -->
+        <div>
+          <label
+            for="adminEmail"
+            class="mb-2 block text-sm font-medium text-gray-300"
+          >
+            Admin Email
+          </label>
+
+          <input
+            id="adminEmail"
+            name="email"
+            type="email"
+            [(ngModel)]="email"
+            #emailInput="ngModel"
+            required
+            email
+            autocomplete="username"
+            placeholder="admin@nirustore.com"
+            class="w-full rounded-xl border border-gray-700 bg-[#090909] px-4 py-3 text-white outline-none transition placeholder:text-gray-600 focus:border-[#c89b3c] focus:ring-1 focus:ring-[#c89b3c]"
+            [class.border-red-500]="emailInput.invalid && emailInput.touched"
+          />
+
+          <p
+            *ngIf="emailInput.invalid && emailInput.touched"
+            class="mt-1 text-xs text-red-400"
+          >
+            Enter a valid email address.
+          </p>
+        </div>
+
+        <!-- PASSWORD -->
+        <div>
+          <label
+            for="adminPassword"
+            class="mb-2 block text-sm font-medium text-gray-300"
+          >
+            Password
+          </label>
+
+          <div class="relative">
+            <input
+              id="adminPassword"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              #passwordInput="ngModel"
+              required
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              class="w-full rounded-xl border border-gray-700 bg-[#090909] px-4 py-3 pr-20 text-white outline-none transition placeholder:text-gray-600 focus:border-[#c89b3c] focus:ring-1 focus:ring-[#c89b3c]"
+              [class.border-red-500]="passwordInput.invalid && passwordInput.touched"
+            />
+
+            <button
+              type="button"
+              (click)="showPassword = !showPassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#d4af37] hover:text-white"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+
+          <p
+            *ngIf="passwordInput.invalid && passwordInput.touched"
+            class="mt-1 text-xs text-red-400"
+          >
+            Password is required.
+          </p>
+        </div>
+
+        <!-- SUBMIT -->
+        <button
+          type="submit"
+          [disabled]="loading || loginForm.invalid"
+          class="flex w-full items-center justify-center rounded-xl bg-[#c89b3c] px-4 py-3 font-semibold text-black transition duration-300 hover:bg-[#d4af37] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span *ngIf="!loading">Sign In to Admin Panel</span>
+          <span *ngIf="loading">Signing in...</span>
+        </button>
+
+      </form>
+
+      <div class="mt-6 border-t border-gray-800 pt-5 text-center">
+        <p class="text-xs text-gray-500">
+          <span class="text-[#c89b3c]">●</span>
+          Secure administrator access
+        </p>
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-gray-500">
+      © NiruStore. Administrator access only.
+    </p>
+
+  </div>
+</div>

@@ -1,0 +1,593 @@
+             
+
+<app-navbar></app-navbar>
+<div class="min-h-screen bg-[#faf9f6] text-gray-900">
+
+  <!-- ========================================================= -->
+  <!-- HERO SECTION -->
+  <!-- ========================================================= -->
+
+  <section
+    class="relative overflow-hidden bg-[#111111] min-h-[500px] flex items-center"
+  >
+
+    <!-- Background decoration -->
+    <div
+      class="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full bg-[#c89b3c]/10 blur-3xl"
+    ></div>
+
+    <div
+      class="absolute -left-32 -bottom-32 w-[400px] h-[400px] rounded-full bg-[#c89b3c]/5 blur-3xl"
+    ></div>
+
+    <div
+      class="max-w-7xl mx-auto w-full px-6 lg:px-10 py-20 grid lg:grid-cols-2 gap-12 items-center relative z-10"
+    >
+
+      <!-- Hero Text -->
+      <div>
+
+        <p
+          class="text-[#c89b3c] uppercase tracking-[0.35em] text-sm font-medium mb-5"
+        >
+          Timeless Collection
+        </p>
+
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-serif font-semibold text-white leading-tight"
+        >
+          Time,
+          <span class="text-[#c89b3c]">
+            Reimagined.
+          </span>
+        </h1>
+
+        <p
+          class="text-gray-400 text-base sm:text-lg mt-6 max-w-xl leading-relaxed"
+        >
+          Discover our exclusive collection of luxury watches,
+          crafted for those who appreciate precision, elegance and
+          timeless style.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mt-8">
+
+          <button
+            class="px-7 py-3 rounded-full bg-[#c89b3c] text-black font-semibold
+                   hover:bg-[#d8ae55] transition duration-300"
+          >
+            Shop Collection
+          </button>
+
+          <button
+            class="px-7 py-3 rounded-full border border-[#c89b3c]/60
+                   text-[#c89b3c] hover:bg-[#c89b3c]
+                   hover:text-black transition duration-300"
+          >
+            Explore Luxury
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- Hero Watch -->
+      <div
+        class="relative flex justify-center lg:justify-end"
+      >
+
+        <div
+          class="absolute w-[280px] h-[280px] sm:w-[380px] sm:h-[380px]
+                 rounded-full border border-[#c89b3c]/20"
+        ></div>
+
+        <div
+          class="absolute w-[220px] h-[220px] sm:w-[300px] sm:h-[300px]
+                 rounded-full border border-[#c89b3c]/10"
+        ></div>
+
+        <img
+          src="assets/watch/watch-hero.png"
+          alt="Luxury Watch"
+          class="relative z-10 w-[260px] sm:w-[350px] lg:w-[420px]
+                 object-contain drop-shadow-[0_25px_40px_rgba(0,0,0,0.7)]"
+        />
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- CATEGORY SECTION -->
+  <!-- ========================================================= -->
+
+  <section class="max-w-7xl mx-auto px-6 lg:px-10 pt-14">
+
+    <div class="text-center mb-10">
+
+      <p
+        class="text-[#c89b3c] uppercase tracking-[0.3em] text-xs font-semibold"
+      >
+        Our Collection
+      </p>
+
+      <h2
+        class="text-3xl sm:text-4xl font-serif font-semibold mt-3"
+      >
+        Find Your Perfect Watch
+      </h2>
+
+      <p class="text-gray-500 mt-3">
+        Explore watches designed for every occasion.
+      </p>
+
+    </div>
+
+
+    <!-- Categories -->
+
+    <div
+      class="flex gap-3 overflow-x-auto pb-3 scrollbar-hide justify-start lg:justify-center"
+    >
+
+      <button
+        (click)="selectedCategory = 'All'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'All'"
+        [class.text-black]="selectedCategory === 'All'"
+        class="px-6 py-2.5 rounded-full border border-gray-300
+               whitespace-nowrap hover:border-[#c89b3c]
+               transition"
+      >
+        All Watches
+      </button>
+
+      <button
+        (click)="selectedCategory = 'Men'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Men'"
+        [class.text-black]="selectedCategory === 'Men'"
+        class="px-6 py-2.5 rounded-full border border-gray-300
+               whitespace-nowrap hover:border-[#c89b3c]
+               transition"
+      >
+        Men's
+      </button>
+
+      <button
+        (click)="selectedCategory = 'Women'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Women'"
+        [class.text-black]="selectedCategory === 'Women'"
+        class="px-6 py-2.5 rounded-full border border-gray-300
+               whitespace-nowrap hover:border-[#c89b3c]
+               transition"
+      >
+        Women's
+      </button>
+
+      <button
+        (click)="selectedCategory = 'Luxury'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Luxury'"
+        [class.text-black]="selectedCategory === 'Luxury'"
+        class="px-6 py-2.5 rounded-full border border-gray-300
+               whitespace-nowrap hover:border-[#c89b3c]
+               transition"
+      >
+        Luxury
+      </button>
+
+      <button
+        (click)="selectedCategory = 'Sport'"
+        [class.bg-[#c89b3c]]="selectedCategory === 'Sport'"
+        [class.text-black]="selectedCategory === 'Sport'"
+        class="px-6 py-2.5 rounded-full border border-gray-300
+               whitespace-nowrap hover:border-[#c89b3c]
+               transition"
+      >
+        Sport
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- SEARCH + SORT -->
+  <!-- ========================================================= -->
+
+  <section class="max-w-7xl mx-auto px-6 lg:px-10 mt-12">
+
+    <div
+      class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between"
+    >
+
+      <!-- Search -->
+
+      <div
+        class="relative w-full md:max-w-md"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="absolute left-4 top-1/2 -translate-y-1/2
+                 w-5 h-5 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0
+               7 7 0 0 1 14 0Z"
+          />
+        </svg>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Search watches..."
+          class="w-full pl-12 pr-5 py-3 rounded-full
+                 border border-gray-200 bg-white
+                 focus:outline-none focus:border-[#c89b3c]
+                 transition"
+        />
+
+      </div>
+
+
+      <!-- Sort -->
+
+      <select
+        [(ngModel)]="sortOption"
+        class="px-5 py-3 rounded-full border border-gray-200
+               bg-white focus:outline-none
+               focus:border-[#c89b3c]"
+      >
+        <option value="default">
+          Sort By
+        </option>
+
+        <option value="low">
+          Price: Low to High
+        </option>
+
+        <option value="high">
+          Price: High to Low
+        </option>
+
+        <option value="rating">
+          Highest Rated
+        </option>
+
+      </select>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================================================= -->
+  <!-- PRODUCTS -->
+  <!-- ========================================================= -->
+
+  <section
+    class="max-w-7xl mx-auto px-6 lg:px-10 py-12"
+  >
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+             gap-6"
+    >
+
+      <!-- PRODUCT CARD -->
+
+      <div
+        *ngFor="let watch of filteredWatches"
+        class="group bg-white rounded-2xl overflow-hidden
+               border border-gray-100
+               hover:border-[#c89b3c]/40
+               hover:shadow-xl
+               transition duration-300"
+      >
+
+        <!-- Image -->
+
+        <div
+          class="relative bg-[#f5f3ef] h-[300px]
+                 flex items-center justify-center overflow-hidden"
+        >
+
+          <!-- Badge -->
+
+          <span
+            *ngIf="watch.discount"
+            class="absolute top-4 left-4 z-10
+                   bg-[#111111] text-[#c89b3c]
+                   text-xs font-semibold
+                   px-3 py-1.5 rounded-full"
+          >
+            {{ watch.discount }}% OFF
+          </span>
+
+
+          <!-- Wishlist -->
+
+          <button
+            (click)="toggleWishlist(watch)"
+            class="absolute top-4 right-4 z-10
+                   w-10 h-10 rounded-full bg-white
+                   flex items-center justify-center
+                   shadow-sm hover:bg-[#111111]
+                   transition"
+          >
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              [class.text-red-500]="watch.wishlist"
+              [class.fill-red-500]="watch.wishlist"
+              [class.text-gray-600]="!watch.wishlist"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0
+                   L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78
+                   7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"
+              />
+            </svg>
+
+          </button>
+
+
+          <!-- Product Image -->
+
+          <img
+            [src]="watch.image"
+            [alt]="watch.name"
+            class="w-[220px] h-[240px] object-contain
+                   group-hover:scale-110
+                   transition duration-500"
+          />
+
+
+          <!-- Quick View -->
+
+          <button
+            class="absolute bottom-4 left-1/2
+                   -translate-x-1/2
+                   bg-[#111111] text-white
+                   px-5 py-2 rounded-full
+                   text-sm opacity-0
+                   group-hover:opacity-100
+                   transition duration-300"
+          >
+            Quick View
+          </button>
+
+        </div>
+
+
+        <!-- Product Details -->
+
+        <div class="p-5">
+
+          <!-- Category -->
+
+          <p
+            class="text-xs uppercase tracking-wider
+                   text-[#c89b3c] font-medium"
+          >
+            {{ watch.category }}
+          </p>
+
+
+          <!-- Name -->
+
+          <h3
+            class="font-semibold text-lg mt-1
+                   group-hover:text-[#b0842e]
+                   transition"
+          >
+            {{ watch.name }}
+          </h3>
+
+
+          <!-- Rating -->
+
+          <div class="flex items-center gap-2 mt-2">
+
+            <div class="flex">
+
+              <span
+                *ngFor="let star of [1,2,3,4,5]"
+                class="text-sm"
+                [class.text-[#c89b3c]]="star <= watch.rating"
+                [class.text-gray-300]="star > watch.rating"
+              >
+                ★
+              </span>
+
+            </div>
+
+            <span class="text-xs text-gray-400">
+              ({{ watch.reviews }})
+            </span>
+
+          </div>
+
+
+          <!-- Price -->
+
+          <div
+            class="flex items-center justify-between mt-4"
+          >
+
+            <div>
+
+              <span
+                class="text-xl font-bold"
+              >
+                ₹{{ watch.price | number }}
+              </span>
+
+              <span
+                *ngIf="watch.oldPrice"
+                class="text-sm text-gray-400
+                       line-through ml-2"
+              >
+                ₹{{ watch.oldPrice | number }}
+              </span>
+
+            </div>
+
+
+            <!-- Add Cart -->
+
+            <button
+              (click)="addToCart(watch)"
+              class="w-10 h-10 rounded-full
+                     bg-[#111111]
+                     text-[#c89b3c]
+                     flex items-center justify-center
+                     hover:bg-[#c89b3c]
+                     hover:text-black
+                     transition"
+            >
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4
+                     M7 13 5.4 5M7 13l-2 2h14
+                     m-5 4a2 2 0 1 1-4 0m10 0a2 2 0 1 1-4 0"
+                />
+              </svg>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- NO PRODUCTS -->
+    <!-- ========================================================= -->
+
+    <div
+      *ngIf="filteredWatches.length === 0"
+      class="text-center py-20"
+    >
+
+      <div
+        class="w-20 h-20 rounded-full
+               bg-[#c89b3c]/10
+               flex items-center justify-center
+               mx-auto mb-5"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-9 h-9 text-[#c89b3c]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0
+               7 7 0 0 1 14 0Z"
+          />
+        </svg>
+
+      </div>
+
+      <h3 class="text-xl font-semibold">
+        No watches found
+      </h3>
+
+      <p class="text-gray-500 mt-2">
+        Try another search or category.
+      </p>
+
+    </div>
+
+  </section>
+
+
+
+  <section class="max-w-7xl mx-auto px-6 lg:px-10 pb-16">
+
+    <div
+      class="relative overflow-hidden rounded-3xl
+             bg-[#111111] px-8 sm:px-12 py-14
+             text-center"
+    >
+
+      <div
+        class="absolute -right-20 -top-20
+               w-60 h-60 rounded-full
+               bg-[#c89b3c]/10 blur-2xl"
+      ></div>
+
+      <p
+        class="text-[#c89b3c] uppercase
+               tracking-[0.3em] text-xs"
+      >
+        NiruStore Exclusive
+      </p>
+
+      <h2
+        class="text-white text-3xl sm:text-4xl
+               font-serif mt-4"
+      >
+        Luxury That Lasts a Lifetime
+      </h2>
+
+      <p
+        class="text-gray-400 max-w-xl mx-auto mt-4"
+      >
+        Every timepiece is carefully selected to bring
+        elegance, precision and sophistication to your wrist.
+      </p>
+
+      <button
+        class="mt-7 px-7 py-3 rounded-full
+               bg-[#c89b3c] text-black
+               font-semibold
+               hover:bg-[#d8ae55]
+               transition"
+      >
+        Discover More
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+<app-footer></app-footer>

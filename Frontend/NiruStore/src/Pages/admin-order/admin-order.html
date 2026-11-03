@@ -1,0 +1,724 @@
+
+<div class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+
+  <!-- PAGE HEADER -->
+  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+        Orders
+      </h1>
+      <p class="mt-1 text-sm text-gray-500">
+        Manage and track customer orders from your store.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="refreshOrders()"
+      [disabled]="isLoading"
+      class="inline-flex items-center justify-center gap-2 rounded-lg
+             border border-gray-200 bg-white px-4 py-2.5 text-sm
+             font-semibold text-gray-700 shadow-sm transition
+             hover:border-[#c89b3c] hover:text-[#a67c24]
+             disabled:cursor-not-allowed disabled:opacity-50">
+
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4"
+           [class.animate-spin]="isLoading"
+           fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 4v5h5M20 20v-5h-5M5.5 9A7 7 0 0118 6l2 3M18.5 15A7 7 0 016 18l-2-3"/>
+      </svg>
+
+      {{ isLoading ? 'Loading...' : 'Refresh Orders' }}
+    </button>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+    <!-- TOTAL ORDERS -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Total Orders</p>
+          <h2 class="mt-2 text-2xl font-bold text-gray-900">
+            {{ orders.length }}
+          </h2>
+        </div>
+        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-[#c89b3c]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor"
+               stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER PLACED -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Order Placed</p>
+          <h2 class="mt-2 text-2xl font-bold text-gray-900">
+            {{ orderPlacedCount }}
+          </h2>
+        </div>
+        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor"
+               stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESSING -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Processing</p>
+          <h2 class="mt-2 text-2xl font-bold text-gray-900">
+            {{ processingCount }}
+          </h2>
+        </div>
+        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor"
+               stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERED -->
+    <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Delivered</p>
+          <h2 class="mt-2 text-2xl font-bold text-gray-900">
+            {{ deliveredCount }}
+          </h2>
+        </div>
+        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-green-50 text-green-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor"
+               stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ORDERS TABLE CARD -->
+  <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+    <!-- SEARCH AND FILTER TOOLBAR -->
+    <div class="flex flex-col gap-4 border-b border-gray-100 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <h2 class="text-lg font-semibold text-gray-900">All Orders</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Search, filter, and manage customer orders.
+        </p>
+      </div>
+
+      <div class="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
+
+        <!-- SEARCH -->
+        <div class="relative w-full sm:min-w-64 lg:w-72">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="pointer-events-none absolute left-3 top-1/2 h-4 w-4
+                      -translate-y-1/2 text-gray-400"
+               fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"/>
+            <path stroke-linecap="round" d="m16 16 4 4"/>
+          </svg>
+
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            (input)="applyFilters()"
+            placeholder="Search order or customer..."
+            class="w-full rounded-lg border border-gray-200 bg-white
+                   py-2.5 pl-9 pr-3 text-sm text-gray-700 outline-none
+                   transition placeholder:text-gray-400
+                   focus:border-[#c89b3c] focus:ring-2
+                   focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <!-- STATUS FILTER -->
+        <div class="w-full sm:w-48">
+          <select
+            [(ngModel)]="selectedStatus"
+            (change)="applyFilters()"
+            class="w-full rounded-lg border border-gray-200 bg-white
+                   px-3 py-2.5 text-sm text-gray-700 outline-none
+                   focus:border-[#c89b3c] focus:ring-2
+                   focus:ring-[#c89b3c]/10">
+            <option value="All Status">All Status</option>
+            <option value="Order Placed">Order Placed</option>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <div
+      *ngIf="successMessage"
+      class="mx-4 mt-4 rounded-lg border border-green-200
+             bg-green-50 p-3 text-sm text-green-700 sm:mx-5">
+      {{ successMessage }}
+    </div>
+
+    <!-- LOADING STATE -->
+    <div *ngIf="isLoading" class="px-5 py-16 text-center">
+      <div class="mx-auto h-9 w-9 animate-spin rounded-full
+                  border-4 border-gray-200 border-t-[#c89b3c]">
+      </div>
+      <p class="mt-4 text-sm font-medium text-gray-600">
+        Loading orders...
+      </p>
+      <p class="mt-1 text-xs text-gray-400">
+        Please wait while we fetch your orders.
+      </p>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div
+      *ngIf="!isLoading && errorMessage"
+      class="m-4 rounded-lg border border-red-200 bg-red-50 p-5 sm:m-5">
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm font-semibold text-red-700">
+            Unable to load orders
+          </p>
+          <p class="mt-1 text-sm text-red-600">
+            {{ errorMessage }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="refreshOrders()"
+          class="shrink-0 rounded-lg border border-red-200 bg-white
+                 px-4 py-2 text-sm font-semibold text-red-600
+                 transition hover:bg-red-100">
+          Try Again
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div *ngIf="!isLoading && !errorMessage" class="w-full overflow-x-auto">
+      <table class="w-full min-w-[850px] border-collapse text-left">
+
+        <thead class="bg-gray-50">
+          <tr class="border-b border-gray-100">
+            <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Order ID
+            </th>
+            <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Customer
+            </th>
+            <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Date
+            </th>
+            <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Total
+            </th>
+            <th class="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Status
+            </th>
+            <th class="px-5 py-4 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Actions
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-100">
+
+          @for (order of paginatedOrders; track order.id) {
+            <tr class="transition hover:bg-gray-50/80">
+
+              <!-- ORDER ID -->
+              <td class="whitespace-nowrap px-5 py-4">
+                <span class="text-sm font-semibold text-gray-800">
+                  #{{ order.id }}
+                </span>
+              </td>
+
+              <!-- CUSTOMER -->
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-3">
+                  <div class="flex h-10 w-10 shrink-0 items-center
+                              justify-center rounded-full bg-amber-50
+                              text-sm font-bold text-[#a67c24]">
+                    {{ getInitials(order.customer) }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="truncate text-sm font-semibold text-gray-800">
+                      {{ order.customer }}
+                    </p>
+                    <p class="mt-0.5 text-xs text-gray-400">Customer</p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- DATE -->
+              <td class="whitespace-nowrap px-5 py-4">
+                <span class="text-sm text-gray-600">{{ order.date }}</span>
+              </td>
+
+              <!-- TOTAL -->
+              <td class="whitespace-nowrap px-5 py-4">
+                <span class="text-sm font-semibold text-gray-800">
+                  {{ order.total }}
+                </span>
+              </td>
+
+              <!-- STATUS -->
+              <td class="whitespace-nowrap px-5 py-4">
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full
+                         px-3 py-1.5 text-xs font-semibold"
+                  [ngClass]="getStatusClass(order.status)">
+                  <span
+                    class="h-1.5 w-1.5 rounded-full"
+                    [ngClass]="getStatusDotClass(order.status)">
+                  </span>
+                  {{ order.status }}
+                </span>
+              </td>
+
+              <!-- ACTIONS -->
+              <td class="whitespace-nowrap px-5 py-4">
+                <div class="flex items-center justify-center gap-2">
+
+                  <!-- VIEW -->
+                  <button
+                    type="button"
+                    (click)="openViewPopup(order)"
+                    title="View order"
+                    aria-label="View order"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg
+                           border border-gray-200 bg-white text-blue-600
+                           transition hover:border-blue-200 hover:bg-blue-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                         fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="1.8">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 12s3.5-7 9.75-7 9.75 7 9.75 7-3.5 7-9.75 7-9.75-7-9.75-7z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+
+                  <!-- EDIT -->
+                  <button
+                    type="button"
+                    (click)="openEditPopup(order)"
+                    title="Edit order"
+                    aria-label="Edit order"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg
+                           border border-gray-200 bg-white text-amber-600
+                           transition hover:border-amber-200 hover:bg-amber-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                         fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="1.8">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m16.862 4.487 2.651 2.651M7.5 20.25H3.75V16.5L15.9 4.35a2.652 2.652 0 013.75 3.75L7.5 20.25z"/>
+                    </svg>
+                  </button>
+
+                  <!-- DELETE -->
+                  <button
+                    type="button"
+                    (click)="openDeletePopup(order)"
+                    title="Delete order"
+                    aria-label="Delete order"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg
+                           border border-gray-200 bg-white text-red-600
+                           transition hover:border-red-200 hover:bg-red-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                         fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="1.8">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 10v6m4-6v6"/>
+                    </svg>
+                  </button>
+
+                </div>
+              </td>
+
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="px-5 py-16 text-center">
+                <div class="mx-auto flex h-14 w-14 items-center
+                            justify-center rounded-full bg-gray-100 text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7"
+                       fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+                  </svg>
+                </div>
+                <h3 class="mt-4 text-sm font-semibold text-gray-800">
+                  No orders found
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                  Try changing your search or status filter.
+                </p>
+                <button
+                  type="button"
+                  (click)="clearFilters()"
+                  class="mt-4 text-sm font-semibold text-[#a67c24]
+                         transition hover:text-[#c89b3c]">
+                  Clear filters
+                </button>
+              </td>
+            </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div
+      *ngIf="!isLoading && !errorMessage"
+      class="flex flex-col gap-3 border-t border-gray-100 px-4 py-4
+             sm:flex-row sm:items-center sm:justify-between sm:px-5">
+
+      <p class="text-xs text-gray-500">
+        Showing
+        <span class="font-semibold text-gray-700">{{ startItem }}–{{ endItem }}</span>
+        of
+        <span class="font-semibold text-gray-700">{{ filteredOrders.length }}</span>
+        orders
+      </p>
+
+      <div class="flex flex-wrap items-center gap-1">
+
+        <button
+          type="button"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1 || totalPages === 0"
+          class="flex h-8 items-center gap-1 rounded-md border
+                 border-gray-200 bg-white px-3 text-xs font-medium
+                 text-gray-600 transition hover:border-[#c89b3c]
+                 disabled:cursor-not-allowed disabled:opacity-40">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+               fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m15 18-6-6 6-6"/>
+          </svg>
+          Previous
+        </button>
+
+        @for (page of pageNumbers; track page) {
+          <button
+            type="button"
+            (click)="goToPage(page)"
+            [attr.aria-current]="currentPage === page ? 'page' : null"
+            [class.bg-[#c89b3c]]="currentPage === page"
+            [class.text-white]="currentPage === page"
+            [class.border-[#c89b3c]]="currentPage === page"
+            [class.border-gray-200]="currentPage !== page"
+            [class.text-gray-600]="currentPage !== page"
+            class="flex h-8 min-w-8 items-center justify-center rounded-md
+                   border px-2 text-xs font-medium transition
+                   hover:border-[#c89b3c]">
+            {{ page }}
+          </button>
+        }
+
+        <button
+          type="button"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages || totalPages === 0"
+          class="flex h-8 items-center gap-1 rounded-md border
+                 border-gray-200 bg-white px-3 text-xs font-medium
+                 text-gray-600 transition hover:border-[#c89b3c]
+                 disabled:cursor-not-allowed disabled:opacity-40">
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+               fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m9 18 6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- VIEW ORDER POPUP -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="showViewPopup && selectedOrder"
+  class="fixed inset-0 z-50 flex items-center justify-center
+         overflow-y-auto bg-black/50 p-4"
+  (click)="closePopups()">
+
+  <div
+    class="my-auto w-full max-w-2xl overflow-hidden rounded-2xl
+           bg-white shadow-2xl"
+    (click)="$event.stopPropagation()">
+
+    <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Order Details</h2>
+        <p class="mt-1 text-sm text-gray-500">Order #{{ selectedOrder.id }}</p>
+      </div>
+      <button type="button" (click)="closePopups()" aria-label="Close popup"
+              class="rounded-lg p-2 text-gray-500 hover:bg-gray-100">
+        ✕
+      </button>
+    </div>
+
+    <div class="max-h-[70vh] space-y-6 overflow-y-auto p-6">
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="rounded-xl bg-gray-50 p-4">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Customer</p>
+          <p class="mt-2 font-semibold text-gray-900">{{ selectedOrder.customer }}</p>
+        </div>
+        <div class="rounded-xl bg-gray-50 p-4">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Order Date</p>
+          <p class="mt-2 font-semibold text-gray-900">{{ selectedOrder.date }}</p>
+        </div>
+        <div class="rounded-xl bg-gray-50 p-4">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Total Amount</p>
+          <p class="mt-2 font-bold text-[#a67c24]">{{ selectedOrder.total }}</p>
+        </div>
+        <div class="rounded-xl bg-gray-50 p-4">
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Status</p>
+          <span class="mt-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold"
+                [ngClass]="getStatusClass(selectedOrder.status)">
+            {{ selectedOrder.status }}
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-3 font-semibold text-gray-900">Payment & Delivery</h3>
+        <div class="space-y-2 rounded-xl border border-gray-100 p-4 text-sm">
+          <p>
+            <span class="text-gray-500">Payment Method:</span>
+            <span class="ml-2 font-medium text-gray-800">
+              {{ selectedOrder.raw?.paymentMethod || 'N/A' }}
+            </span>
+          </p>
+          <p>
+            <span class="text-gray-500">Mobile:</span>
+            <span class="ml-2 font-medium text-gray-800">
+              {{ selectedOrder.raw?.deliveryAddress?.mobile || 'N/A' }}
+            </span>
+          </p>
+          <p>
+            <span class="text-gray-500">Email:</span>
+            <span class="ml-2 break-all font-medium text-gray-800">
+              {{ selectedOrder.raw?.deliveryAddress?.email || 'N/A' }}
+            </span>
+          </p>
+          <p>
+            <span class="text-gray-500">Address:</span>
+            <span class="ml-2 font-medium text-gray-800">
+              {{ selectedOrder.raw?.deliveryAddress?.addressLine || 'N/A' }}
+              {{ selectedOrder.raw?.deliveryAddress?.landmark || '' }}
+              {{ selectedOrder.raw?.deliveryAddress?.city || '' }}
+              {{ selectedOrder.raw?.deliveryAddress?.state || '' }}
+              {{ selectedOrder.raw?.deliveryAddress?.pincode || '' }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-3 font-semibold text-gray-900">Ordered Products</h3>
+
+        <div *ngIf="!selectedOrder.raw?.items?.length"
+             class="rounded-xl bg-gray-50 p-4 text-sm text-gray-500">
+          No product details available.
+        </div>
+
+        <div *ngFor="let item of selectedOrder.raw?.items"
+             class="mb-3 flex items-center justify-between gap-4 rounded-xl
+                    border border-gray-100 p-4">
+          <div class="min-w-0">
+            <p class="truncate font-semibold text-gray-800">
+              {{ item.productName || 'Product' }}
+            </p>
+            <p class="mt-1 text-xs text-gray-500">
+              {{ item.brand || '' }} · Quantity: {{ item.quantity || 1 }}
+            </p>
+          </div>
+          <p class="shrink-0 text-sm font-semibold text-gray-900">
+            {{ formatCurrency((item.price || 0) * (item.quantity || 1)) }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="flex justify-end border-t border-gray-100 px-6 py-4">
+      <button type="button" (click)="closePopups()"
+              class="rounded-lg bg-gray-900 px-5 py-2.5 text-sm
+                     font-semibold text-white hover:bg-gray-700">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- EDIT ORDER POPUP -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="showEditPopup && selectedOrder"
+  class="fixed inset-0 z-50 flex items-center justify-center
+         overflow-y-auto bg-black/50 p-4"
+  >
+
+  <div class="my-auto w-full max-w-md rounded-2xl bg-white shadow-2xl"
+       (click)="$event.stopPropagation()">
+
+    <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Update Order</h2>
+        <p class="mt-1 text-sm text-gray-500">Order #{{ selectedOrder.id }}</p>
+      </div>
+      <button type="button" (click)="closePopups()" aria-label="Close popup"
+              class="rounded-lg p-2 text-gray-500 hover:bg-gray-100">
+        ✕
+      </button>
+    </div>
+
+    <div class="space-y-5 p-6">
+      <div>
+        <label class="mb-2 block text-sm font-semibold text-gray-700">Customer</label>
+        <input type="text" [value]="selectedOrder.customer" readonly
+               class="w-full rounded-lg border border-gray-200 bg-gray-50
+                      px-4 py-3 text-sm text-gray-600"/>
+      </div>
+
+      <div>
+        <label class="mb-2 block text-sm font-semibold text-gray-700">Order Status</label>
+        <select [(ngModel)]="editStatus"
+                class="w-full rounded-lg border border-gray-200 bg-white
+                       px-4 py-3 text-sm outline-none
+                       focus:border-[#c89b3c] focus:ring-2
+                       focus:ring-[#c89b3c]/10">
+          <option value="Order Placed">Order Placed</option>
+          <option value="Processing">Processing</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <p *ngIf="popupError" class="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+        {{ popupError }}
+      </p>
+
+      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button type="button" (click)="closePopups()"
+                [disabled]="isSaving"
+                class="rounded-lg border border-gray-200 px-5 py-2.5
+                       text-sm font-semibold text-gray-700 hover:bg-gray-50
+                       disabled:opacity-50">
+          Cancel
+        </button>
+        <button type="button" (click)="saveOrderStatus()"
+                [disabled]="isSaving"
+                class="rounded-lg bg-[#c89b3c] px-5 py-2.5 text-sm
+                       font-semibold text-white transition hover:bg-[#a67c24]
+                       disabled:opacity-50">
+          {{ isSaving ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- DELETE CONFIRMATION POPUP -->
+<!-- ===================================================== -->
+
+<div
+  *ngIf="showDeletePopup && selectedOrder"
+  class="fixed inset-0 z-50 flex items-center justify-center
+         overflow-y-auto bg-black/50 p-4"
+  >
+
+  <div class="my-auto w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+       (click)="$event.stopPropagation()">
+
+    <div class="mx-auto flex h-14 w-14 items-center justify-center
+                rounded-full bg-red-50 text-red-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7"
+           fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 10v6m4-6v6"/>
+      </svg>
+    </div>
+
+    <h2 class="mt-4 text-center text-xl font-bold text-gray-900">
+      Delete this order?
+    </h2>
+    <p class="mt-2 text-center text-sm leading-6 text-gray-500">
+      Are you sure you want to delete order
+      <span class="font-semibold text-gray-800">#{{ selectedOrder.id }}</span>?
+      This action cannot be undone.
+    </p>
+
+    <p *ngIf="popupError"
+       class="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+      {{ popupError }}
+    </p>
+
+    <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
+      <button type="button" (click)="closePopups()"
+              [disabled]="isSaving"
+              class="flex-1 rounded-lg border border-gray-200 px-4 py-2.5
+                     text-sm font-semibold text-gray-700 hover:bg-gray-50
+                     disabled:opacity-50">
+        Keep Order
+      </button>
+      <button type="button" (click)="confirmDeleteOrder()"
+              [disabled]="isSaving"
+              class="flex-1 rounded-lg bg-red-600 px-4 py-2.5 text-sm
+                     font-semibold text-white hover:bg-red-700
+                     disabled:cursor-not-allowed disabled:opacity-50">
+        {{ isSaving ? 'Deleting...' : 'Yes, Delete' }}
+      </button>
+    </div>
+  </div>
+</div>

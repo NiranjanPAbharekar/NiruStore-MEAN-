@@ -1,0 +1,50 @@
+<div class="min-h-screen  flex">
+
+  <!-- LEFT SIDEBAR -->
+<app-admin-left-pannel
+    [sidebarOpen]="sidebarOpen"
+    (menuSelected)="setActiveMenu($event)"
+    (logoutClicked)="logout()"
+  >
+  </app-admin-left-pannel>
+
+
+  <!-- ======================================================= -->
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <!-- ======================================================= -->
+
+  @if (sidebarOpen) {
+
+    <div
+      class="fixed
+             inset-0
+             z-40
+             bg-black/50
+             lg:hidden"
+      (click)="closeSidebar()"
+    >
+    </div>
+
+  }
+
+
+  <!-- MAIN -->
+  <div
+    class="flex-1 min-w-0 min-h-screen flex flex-col lg:ml-64 relative">
+
+    <!-- TOP BAR -->
+    <app-admin-top-bar
+      (menuClicked)="openSidebar()">
+    </app-admin-top-bar>
+
+
+    <!-- CHILD PAGE GOES HERE -->
+    <main class="bg-[#68502E] flex-1 min-w-0 p-5 sm:p-4 lg:px-8 lg-py-2">
+
+      <router-outlet></router-outlet>
+
+    </main>
+
+  </div>
+
+</div>

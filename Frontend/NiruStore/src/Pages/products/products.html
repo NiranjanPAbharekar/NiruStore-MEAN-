@@ -1,0 +1,816 @@
+
+<section class="min-h-screen py-10">
+
+  <div class="max-w-8xl mx-auto px-4">
+
+    <div class="grid lg:grid-cols-5 gap-6">
+
+      <!-- ================================================= -->
+      <!-- DESKTOP FILTER SIDEBAR -->
+      <!-- ================================================= -->
+
+      <aside
+        class="hidden lg:block bg-[#111111] border border-gray-800 rounded-xl p-6 h-fit">
+
+        <!-- FILTER HEADER -->
+
+        <div class="flex justify-between items-center mb-8">
+
+          <h2 class="text-white font-semibold tracking-wider uppercase">
+            Filters
+          </h2>
+
+          <button
+            type="button"
+            (click)="clearFilters()"
+            class="text-sm text-[#d4af37] hover:underline">
+            Clear
+          </button>
+
+        </div>
+
+        <!-- CATEGORY -->
+
+        <div class="mb-8">
+
+          <h3 class="text-white font-medium mb-4">
+            Categories
+          </h3>
+
+          <div class="space-y-3">
+
+            <label
+              *ngFor="let category of categories"
+              class="flex items-center justify-between text-gray-300 cursor-pointer">
+
+              <div class="flex items-center gap-3">
+
+                <input
+                  type="checkbox"
+                  class="accent-[#d4af37]"
+                  [checked]="isCategorySelected(category.name)"
+                  (change)="toggleCategory(category.name)">
+
+                <span>{{ category.name }}</span>
+
+              </div>
+
+              <span class="text-xs text-gray-500">
+                ({{ category.count }})
+              </span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+        <!-- BRAND -->
+
+        <div class="mb-8">
+
+          <h3 class="text-white font-medium mb-4">
+            Brand
+          </h3>
+
+          <div class="space-y-3">
+
+            <label
+              *ngFor="let brand of brands"
+              class="flex items-center justify-between text-gray-300 cursor-pointer">
+
+              <div class="flex items-center gap-3">
+
+                <input
+                  type="checkbox"
+                  class="accent-[#d4af37]"
+                  [checked]="selectedBrand === brand.name"
+                  (change)="toggleBrand(brand.name)">
+
+                <span>{{ brand.name }}</span>
+
+              </div>
+
+              <span class="text-xs text-gray-500">
+                ({{ brand.count }})
+              </span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+        <!-- PRICE -->
+
+        <div class="mb-8">
+
+          <div class="flex justify-between items-center mb-4">
+
+            <h3 class="text-white font-medium">
+              Price Range
+            </h3>
+
+            <span class="text-[#d4af37] text-sm font-medium">
+              ₹{{ maxPrice }}
+            </span>
+
+          </div>
+
+          <input
+            type="range"
+            [min]="minProductPrice"
+            [max]="maxProductPrice"
+            step="1000"
+            [(ngModel)]="maxPrice"
+            (input)="applyFilters()"
+            class="w-full accent-[#d4af37]">
+
+          <div class="flex justify-between mt-3 text-sm text-gray-400">
+
+            <span>₹{{ minProductPrice }}</span>
+            <span>₹{{ maxProductPrice }}</span>
+
+          </div>
+
+        </div>
+
+        <!-- COLORS -->
+
+        <div class="mb-8" *ngIf="colors.length > 0">
+
+          <h3 class="text-white font-medium mb-4">
+            Color
+          </h3>
+
+          <div class="flex gap-3 flex-wrap">
+
+            <button
+              type="button"
+              *ngFor="let color of colors"
+              (click)="selectColor(color)"
+              [ngStyle]="{'background-color': color}"
+              [title]="color"
+              [attr.aria-label]="'Filter by ' + color"
+              class="w-8 h-8 rounded-full border-2 transition hover:scale-110"
+              [class.border-white]="selectedColor === color"
+              [class.border-gray-700]="selectedColor !== color">
+            </button>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+      <!-- ================================================= -->
+      <!-- PRODUCT AREA -->
+      <!-- ================================================= -->
+
+      <div class="lg:col-span-4">
+
+        <!-- TOP BAR -->
+
+        <div
+          class="bg-[#111111] border border-gray-800 rounded-xl p-5
+                 flex flex-col md:flex-row justify-between items-stretch
+                 md:items-center gap-4 mb-6">
+
+          <!-- MOBILE FILTER BUTTON -->
+
+          <button
+            type="button"
+            (click)="openFilterDrawer()"
+            class="inline-flex lg:hidden items-center  gap-2
+                   rounded-lg border border-gray-700 bg-[#1a1a1a]
+                   px-4 py-3 text-white transition
+                   hover:border-[#d4af37]">
+
+            <i class="fa-solid fa-sliders"></i>
+            <span>Filters</span>
+
+          </button>
+
+          <!-- SORT -->
+
+          <select
+            [(ngModel)]="sortOption"
+            (change)="sortProducts()"
+            class="bg-[#1a1a1a] text-white border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-[#d4af37]">
+
+            <option value="popular">Sort by Popular</option>
+            <option value="priceLow">Price: Low to High</option>
+            <option value="priceHigh">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+
+          </select>
+
+          <!-- SEARCH -->
+
+          <div class="relative">
+
+            <input
+              type="text"
+              [(ngModel)]="searchText"
+              (input)="searchProduct()"
+              placeholder="Search products..."
+              class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 pr-10 text-white placeholder-gray-500 focus:outline-none focus:border-[#d4af37]">
+
+            <i
+              class="fa-solid fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+            </i>
+
+          </div>
+
+        </div>
+
+        <!-- LOADING -->
+
+        <div
+          *ngIf="loading"
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+          <div
+            *ngFor="let item of [1,2,3,4,5,6]"
+            class="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden animate-pulse">
+
+            <div class="w-full h-72 bg-[#1d1d1d]"></div>
+
+            <div class="p-5 space-y-4">
+
+              <div class="h-3 bg-[#1d1d1d] rounded w-1/3"></div>
+              <div class="h-5 bg-[#1d1d1d] rounded w-3/4"></div>
+              <div class="h-4 bg-[#1d1d1d] rounded w-full"></div>
+              <div class="h-8 bg-[#1d1d1d] rounded w-1/2"></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- NO PRODUCTS -->
+
+        <div
+          *ngIf="!loading && filteredProducts.length === 0"
+          class="bg-[#111111] border border-gray-800 rounded-xl p-12 text-center">
+
+          <i class="fa-solid fa-box-open text-5xl text-gray-600 mb-5"></i>
+
+          <h3 class="text-white text-xl font-semibold">
+            No Products Found
+          </h3>
+
+          <p class="text-gray-500 mt-2">
+            Try changing your filters or search.
+          </p>
+
+          <button
+            type="button"
+            (click)="clearFilters()"
+            class="mt-6 px-6 py-3 bg-[#d4af37] text-black rounded-lg font-semibold">
+            Clear Filters
+          </button>
+
+        </div>
+
+        <!-- PRODUCT GRID -->
+
+        <div
+          *ngIf="!loading && filteredProducts.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+          <!-- PRODUCT CARD -->
+
+          <div
+            *ngFor="let product of paginatedProducts; trackBy: trackById"
+            class="group bg-[#111111] border border-gray-800 rounded-xl overflow-hidden hover:border-[#d4af37] transition duration-300">
+
+            <!-- IMAGE -->
+
+            <div class="relative overflow-hidden"   (click)="openProductDetails(product)">
+
+              <img
+                [src]="product.image"
+                [alt]="product.productName"
+                class="w-full h-72 object-cover group-hover:scale-110 transition duration-500">
+
+              <!-- BADGE -->
+
+              <span
+                *ngIf="product.badge"
+                class="absolute top-3 left-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full">
+                {{ product.badge }}
+              </span>
+
+              <!-- WISHLIST -->
+
+              <button
+                type="button"
+                (click)="toggleWishlist(product)"
+                class="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 backdrop-blur flex items-center justify-center hover:bg-[#d4af37] hover:text-black transition">
+
+                <i
+                  class="fa-heart"
+                  [ngClass]="product.isFavourite
+                    ? 'fa-solid text-red-500'
+                    : 'fa-regular text-white'">
+                </i>
+
+              </button>
+
+              <!-- QUICK VIEW -->
+
+              <div
+                class="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition duration-300">
+
+                <button
+                (click)="openProductDetails(product)"
+                  type="button"
+                  class="w-full py-3 bg-[#d4af37] text-black font-semibold">
+                  Quick View
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- DETAILS -->
+
+            <div class="p-5">
+
+              <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">
+                {{ product.brand }}
+              </p>
+
+              <h3 class="text-white text-lg font-semibold group-hover:text-[#d4af37] transition">
+                {{ product.productName }}
+              </h3>
+
+              <p class="text-xs text-gray-500 mt-2">
+                Category:
+                <span class="text-gray-300">
+                  {{ product.category }}
+                </span>
+              </p>
+
+              <p class="text-gray-400 text-sm mt-2 line-clamp-2">
+                {{ product.description }}
+              </p>
+
+              <!-- COLOR -->
+
+              <div
+                *ngIf="product.color"
+                class="flex items-center gap-2 mt-3">
+
+                <span class="text-gray-500 text-sm">Color:</span>
+
+                <span
+                  class="w-5 h-5 rounded-full border border-gray-500"
+                  [ngStyle]="{'background-color': product.color}">
+                </span>
+
+                <span class="text-gray-300 text-sm">
+                  {{ product.color }}
+                </span>
+
+              </div>
+
+              <!-- PRICE -->
+
+              <div class="flex items-center gap-3 mt-4">
+
+                <span class="text-2xl font-bold text-white">
+                  ₹{{ product.discountPrice }}
+                </span>
+
+                <span
+                  *ngIf="product.oldPrice"
+                  class="text-gray-500 line-through text-sm">
+                  ₹{{ product.oldPrice }}
+                </span>
+
+              </div>
+
+              <p *ngIf="product.price" class="text-xs text-gray-500 mt-1">
+                Original Price: ₹{{ product.price }}
+              </p>
+
+              <!-- DISCOUNT -->
+
+              <span
+                *ngIf="calculateDiscount(product.price, product.discountPrice) > 0"
+                class="inline-block mt-2 text-green-400 text-sm">
+
+                {{ calculateDiscount(product.price, product.discountPrice) }}% OFF
+
+              </span>
+
+              <!-- STOCK -->
+
+              <div class="mt-3 text-sm">
+
+                <span class="text-gray-400">
+                  Availability:
+                </span>
+
+                @if (product.stock <= 0) {
+
+                  <span class="ml-2 text-red-400 font-medium">
+                    Out of Stock
+                  </span>
+
+                } @else {
+
+                  <span class="ml-2 text-green-400 font-medium">
+                    In Stock: {{ product.stock }}
+                  </span>
+
+                }
+
+              </div>
+
+              <!-- PRODUCT ID -->
+
+              <p
+                *ngIf="product._id"
+                class="text-xs text-gray-600 mt-2 truncate">
+                ID: {{ product._id }}
+              </p>
+
+              <!-- ADD TO CART -->
+
+            
+<!-- ADD TO CART / QUANTITY SELECTOR -->
+
+<div class="mt-6 w-full">
+
+  @if (getCartQuantity(product) > 0) {
+
+    <!-- QUANTITY SELECTOR -->
+
+    <div
+      class="flex items-center justify-between
+             w-full rounded-lg overflow-hidden
+             bg-[#1d1d1d] border border-[#d4af37]">
+
+      <!-- MINUS BUTTON -->
+
+      <button
+        type="button"
+        (click)="decreaseProductQuantity(product)"
+        [disabled]="getCartQuantity(product) <= 1"
+        class="w-14 py-3 text-white
+               hover:bg-[#d4af37] hover:text-black
+               transition
+               disabled:opacity-40
+               disabled:cursor-not-allowed">
+
+        <i class="fa-solid fa-minus"></i>
+
+      </button>
+
+      <!-- PRODUCT QUANTITY -->
+
+      <span class="text-white font-semibold text-lg">
+        {{ getCartQuantity(product) }}
+      </span>
+
+      <!-- PLUS BUTTON -->
+
+      <button
+        type="button"
+        (click)="increaseProductQuantity(product)"
+        [disabled]="getCartQuantity(product) >= product.stock"
+        class="w-14 py-3 text-white
+               hover:bg-[#d4af37] hover:text-black
+               transition
+               disabled:opacity-40
+               disabled:cursor-not-allowed">
+
+        <i class="fa-solid fa-plus"></i>
+
+      </button>
+
+    </div>
+
+  } @else {
+
+    <!-- ADD TO CART BUTTON -->
+
+    <button
+      type="button"
+      (click)="addToCart(product)"
+      [disabled]="product.stock <= 0"
+      class="w-full py-3 rounded-lg
+             bg-[#1d1d1d] border border-gray-700
+             text-white hover:bg-[#d4af37]
+             hover:text-black hover:border-[#d4af37]
+             transition disabled:opacity-40
+             disabled:cursor-not-allowed">
+
+      <i class="fa-solid fa-cart-shopping mr-2"></i>
+
+      @if (product.stock > 0) {
+        Add To Cart
+      } @else {
+        Out of Stock
+      }
+
+    </button>
+
+  }
+
+</div>
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- PAGINATION -->
+
+        <div
+          *ngIf="!loading && filteredProducts.length > 0"
+          class="flex flex-col sm:flex-row justify-between items-center mt-10 gap-5">
+
+          <!-- RESULT COUNT -->
+
+          <p class="text-gray-400 text-sm">
+
+            Showing
+            <span class="text-white font-semibold">
+              {{ paginatedProducts.length }}
+            </span>
+            of
+            <span class="text-white font-semibold">
+              {{ filteredProducts.length }}
+            </span>
+            products
+
+          </p>
+
+          <!-- PAGE CONTROLS -->
+
+          <div class="flex items-center gap-2">
+
+            <button
+              type="button"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+              class="w-10 h-10 rounded-lg bg-[#111111] border border-gray-700 text-white hover:bg-[#d4af37] hover:text-black disabled:opacity-40">
+
+              <i class="fa-solid fa-angle-left"></i>
+
+            </button>
+
+            <button
+              type="button"
+              *ngFor="let page of pages"
+              (click)="goToPage(page)"
+              class="w-10 h-10 rounded-lg border transition"
+              [ngClass]="page === currentPage
+                ? 'bg-[#d4af37] text-black border-[#d4af37]'
+                : 'bg-[#111111] text-white border-gray-700 hover:bg-[#d4af37] hover:text-black'">
+
+              {{ page }}
+
+            </button>
+
+            <button
+              type="button"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+              class="w-10 h-10 rounded-lg bg-[#111111] border border-gray-700 text-white hover:bg-[#d4af37] hover:text-black disabled:opacity-40">
+
+              <i class="fa-solid fa-angle-right"></i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================================================= -->
+  <!-- MOBILE FILTER DRAWER -->
+  <!-- ================================================= -->
+
+  <!-- BACKDROP -->
+
+  <div
+    *ngIf="isFilterDrawerOpen"
+    (click)="closeFilterDrawer()"
+    class="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm lg:hidden">
+  </div>
+
+  <!-- RIGHT-TO-LEFT DRAWER -->
+
+  <aside
+    class="fixed right-0 top-0 z-[101] flex h-[100dvh]
+           w-[88%] max-w-sm flex-col border-l border-gray-800
+           bg-[#111111] text-white shadow-2xl
+           transition-transform duration-300 ease-in-out lg:hidden"
+    [class.translate-x-0]="isFilterDrawerOpen"
+    [class.translate-x-full]="!isFilterDrawerOpen"
+    [attr.aria-hidden]="!isFilterDrawerOpen">
+
+    <!-- DRAWER HEADER -->
+
+    <div class="flex shrink-0 items-center justify-between border-b border-gray-800 p-5">
+
+      <h2 class="text-white font-semibold tracking-wider uppercase">
+        Filters
+      </h2>
+
+      <button
+        type="button"
+        (click)="closeFilterDrawer()"
+        aria-label="Close filters"
+        class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-300 hover:bg-gray-800 hover:text-[#d4af37]">
+
+        <i class="fa-solid fa-xmark text-xl"></i>
+
+      </button>
+
+    </div>
+
+    <!-- DRAWER FILTER CONTENT -->
+
+    <div class="flex-1 space-y-6 overflow-y-auto p-5">
+
+      <!-- CATEGORY -->
+
+      <div>
+
+        <h3 class="text-white font-medium mb-4">
+          Categories
+        </h3>
+
+        <div class="space-y-3">
+
+          <label
+            *ngFor="let category of categories"
+            class="flex items-center justify-between gap-3 text-gray-300 cursor-pointer">
+
+            <span class="flex items-center gap-3">
+
+              <input
+                type="checkbox"
+                class="accent-[#d4af37]"
+                [checked]="selectedCategory === category.name"
+                (change)="toggleCategory(category.name)">
+
+              {{ category.name }}
+
+            </span>
+
+            <span class="text-xs text-gray-500">
+              ({{ category.count }})
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+      <div class="border-t border-gray-800"></div>
+
+      <!-- BRAND -->
+
+      <div>
+
+        <h3 class="text-white font-medium mb-4">
+          Brand
+        </h3>
+
+        <div class="space-y-3">
+
+          <label
+            *ngFor="let brand of brands"
+            class="flex items-center justify-between gap-3 text-gray-300 cursor-pointer">
+
+            <span class="flex items-center gap-3">
+
+              <input
+                type="checkbox"
+                class="accent-[#d4af37]"
+                [checked]="selectedBrand === brand.name"
+                (change)="toggleBrand(brand.name)">
+
+              {{ brand.name }}
+
+            </span>
+
+            <span class="text-xs text-gray-500">
+              ({{ brand.count }})
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+      <div class="border-t border-gray-800"></div>
+
+      <!-- PRICE -->
+
+      <div>
+
+        <div class="flex justify-between items-center mb-4">
+
+          <h3 class="text-white font-medium">
+            Price Range
+          </h3>
+
+          <span class="text-[#d4af37] text-sm font-medium">
+            ₹{{ maxPrice }}
+          </span>
+
+        </div>
+
+        <input
+          type="range"
+          [min]="minProductPrice"
+          [max]="maxProductPrice"
+          step="1000"
+          [(ngModel)]="maxPrice"
+          (input)="applyFilters()"
+          class="w-full accent-[#d4af37]">
+
+        <div class="flex justify-between mt-3 text-sm text-gray-400">
+
+          <span>₹{{ minProductPrice }}</span>
+          <span>₹{{ maxProductPrice }}</span>
+
+        </div>
+
+      </div>
+
+      <!-- COLORS -->
+
+      <div *ngIf="colors.length > 0">
+
+        <div class="border-t border-gray-800 mb-5"></div>
+
+        <h3 class="text-white font-medium mb-4">
+          Color
+        </h3>
+
+        <div class="flex gap-3 flex-wrap">
+
+          <button
+            type="button"
+            *ngFor="let color of colors"
+            (click)="selectColor(color)"
+            [ngStyle]="{'background-color': color}"
+            [title]="color"
+            [attr.aria-label]="'Filter by ' + color"
+            class="w-8 h-8 rounded-full border-2 transition hover:scale-110"
+            [class.border-white]="selectedColor === color"
+            [class.border-gray-700]="selectedColor !== color">
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DRAWER FOOTER -->
+
+    <div class="flex shrink-0 gap-3 border-t border-gray-800 bg-[#111111] p-4">
+
+      <button
+        type="button"
+        (click)="clearFilters()"
+        class="flex-1 rounded-lg border border-gray-700 px-3 py-3 text-sm font-medium text-white hover:border-[#d4af37]">
+
+        Clear All
+
+      </button>
+
+      <button
+        type="button"
+        (click)="closeFilterDrawer()"
+        class="flex-1 rounded-lg bg-[#d4af37] px-3 py-3 text-sm font-semibold text-black hover:bg-[#c49b2e]">
+
+        Show Products
+
+      </button>
+
+    </div>
+
+  </aside>
+
+</section>

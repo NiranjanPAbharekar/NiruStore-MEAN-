@@ -1,0 +1,848 @@
+
+<nav class="bg-[#0d0d0d] text-white sticky top-0 z-50 border-b border-gray-800">
+
+  <div class="max-w-8xl mx-auto px-6">
+
+    <div class="flex items-center justify-between h-20">
+
+      <!-- ========================= -->
+      <!-- LOGO -->
+      <!-- ========================= -->
+
+      <a
+        routerLink="/Home"
+        class="flex flex-col leading-none">
+
+        <span class="text-3xl font-serif tracking-widest">
+          NIRU<span class="text-[#c89b3c]">STORE</span>
+        </span>
+
+        <span
+          class="text-[9px] tracking-[5px] text-gray-400 uppercase mt-1">
+          Luxury Execeries
+        </span>
+
+      </a>
+
+
+      <!-- ========================= -->
+      <!-- DESKTOP MENU -->
+      <!-- ========================= -->
+
+      <div
+        class="hidden lg:flex items-center space-x-9 uppercase text-[13px] tracking-widest">
+
+        <a
+          routerLink="/Home"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="hover:text-[#c89b3c] duration-300">
+
+          Home
+
+        </a>
+
+
+        <a
+          routerLink="/Shop"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="hover:text-[#c89b3c] duration-300">
+
+          Shop
+
+        </a>
+
+
+        <a
+          routerLink="/Brands"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="hover:text-[#c89b3c] duration-300">
+
+          Brands
+
+        </a>
+
+
+        <a
+          routerLink="/About"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="hover:text-[#c89b3c] duration-300">
+
+          About Us
+
+        </a>
+
+
+        <a
+          routerLink="/Contact"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="hover:text-[#c89b3c] duration-300">
+
+          Contact Us
+
+        </a>
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- RIGHT ICONS -->
+      <!-- ========================= -->
+
+      <div class="hidden lg:flex items-center space-x-6">
+
+
+        
+
+        <!-- ========================= -->
+        <!-- WISHLIST -->
+        <!-- ========================= -->
+
+        <button
+          type="button"
+          (click)="openWishlist()"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="relative hover:text-[#c89b3c] duration-300">
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+
+          </svg>
+
+
+          <!-- Wishlist Count -->
+
+          <span
+            
+            class="absolute -top-2 -right-2 bg-[#c89b3c] text-black rounded-full text-[10px] w-4 h-4 flex items-center justify-center">
+
+            {{ wishlistCount }}
+
+          </span>
+
+        </button>
+
+
+        <!-- ========================= -->
+        <!-- CART -->
+        <!-- ========================= -->
+
+        <button
+          type="button"
+          [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage"
+          class="relative hover:text-[#c89b3c] duration-300"
+
+          routerLink="/Cart">
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 6h14M10 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+
+          </svg>
+
+
+          <span
+            
+            class="absolute -top-2 -right-2 bg-[#c89b3c] text-black rounded-full text-[10px] w-4 h-4 flex items-center justify-center">
+
+            {{ cartCount }}
+
+          </span>
+
+        </button>
+
+<!-- ========================= -->
+<!-- PROFILE DROPDOWN -->
+<!-- ========================= -->
+
+<div class="relative" [class.pointer-events-none]="isResetPasswordPage"
+[class.opacity-50]="isResetPasswordPage"
+[attr.aria-disabled]="isResetPasswordPage">
+
+  <!-- PROFILE BUTTON -->
+  <button
+    type="button"
+    (click)="toggleProfileDropdown()"
+    class="flex items-center gap-2 group"
+    aria-label="Open profile menu"
+    [attr.aria-expanded]="isProfileDropdownOpen">
+
+    <!-- USER INITIAL -->
+    <span
+      class="w-10 h-10 rounded-full flex items-center justify-center
+             bg-[#c89b3c] text-black font-semibold text-lg
+             border-2 border-[#d4af37]
+             group-hover:bg-[#d4af37] transition">
+
+      {{ userInitial }}
+
+    </span>
+
+    <!-- PROFILE LABEL -->
+    <!-- <span
+      class="text-sm text-gray-300 group-hover:text-[#c89b3c]
+             transition">
+
+      Profile
+
+    </span> -->
+
+    <!-- DROPDOWN ARROW -->
+    <!-- <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-4 h-4 transition-transform duration-300"
+      [class.rotate-180]="isProfileDropdownOpen"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"/>
+
+    </svg> -->
+
+  </button>
+
+  <!-- DROPDOWN MENU -->
+  <div
+    *ngIf="isProfileDropdownOpen"
+    class="absolute right-0 top-full mt-4 w-64
+           bg-[#111111] border border-gray-800
+           rounded-xl shadow-2xl overflow-hidden z-[80]">
+
+    <!-- USER INFORMATION -->
+    <div class="px-5 py-4 border-b border-gray-800">
+
+      <div class="flex items-center gap-3">
+
+        <span
+          class="w-11 h-11 rounded-full flex items-center
+                 justify-center bg-[#c89b3c] text-black
+                 text-xl font-bold shrink-0">
+
+          {{ userInitial }}
+
+        </span>
+
+        <div class="min-w-0">
+
+          <p class="text-white font-medium truncate">
+            {{ loggedInUserName }}
+          </p>
+
+          <p class="text-gray-500 text-xs truncate">
+            {{ loggedInUserEmail }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MY ACCOUNT -->
+    <a
+      routerLink="/MyAccount"
+      (click)="closeProfileDropdown()"
+      class="flex items-center gap-3 px-5 py-3
+             text-sm text-gray-300
+             hover:bg-[#c89b3c] hover:text-black transition">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.7"
+          d="M20 21a8 8 0 00-16 0m8-10a5 5 0 100-10 5 5 0 000 10z"/>
+
+      </svg>
+
+      My Account
+
+    </a>
+
+    <!-- ORDER TRACKING -->
+    <a
+      routerLink="/OrderTracking"
+      (click)="closeProfileDropdown()"
+      class="flex items-center gap-3 px-5 py-3
+             text-sm text-gray-300
+             hover:bg-[#c89b3c] hover:text-black transition">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.7"
+          d="M3 7h11v11H3zM14 11h4l3 4v3h-7zM7 21a2 2 0 100-4 2 2 0 000 4zm11 0a2 2 0 100-4 2 2 0 000 4z"/>
+
+      </svg>
+
+      Order Tracking
+
+    </a>
+
+    <!-- CONTACT US -->
+    <a
+      routerLink="/Contact"
+      (click)="closeProfileDropdown()"
+      class="flex items-center gap-3 px-5 py-3
+             text-sm text-gray-300
+             hover:bg-[#c89b3c] hover:text-black transition">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.7"
+          d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/>
+
+      </svg>
+
+      Contact Us
+
+    </a>
+
+    <!-- WISHLIST -->
+    <button
+      type="button"
+      (click)="openWishlist(); closeProfileDropdown()"
+      class="w-full flex items-center justify-between
+             gap-3 px-5 py-3 text-sm text-gray-300
+             hover:bg-[#c89b3c] hover:text-black transition">
+
+      <span class="flex items-center gap-3">
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.7"
+            d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+
+        </svg>
+
+        Wishlist
+
+      </span>
+
+      <span
+        class="min-w-5 h-5 px-1 rounded-full
+               bg-[#c89b3c] text-black text-xs
+               flex items-center justify-center">
+
+        {{ wishlistCount }}
+
+      </span>
+
+    </button>
+
+  </div>
+
+</div>
+
+
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- MOBILE BUTTON -->
+      <!-- ========================= -->
+
+      <button
+        type="button"
+        (click)="toggleMenu()"
+        class="lg:hidden">
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-7 h-7"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"/>
+
+        </svg>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- MOBILE MENU -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="isMenuOpen"
+    class="lg:hidden bg-[#111111] border-t border-gray-800">
+
+
+    <a
+      routerLink="/Home"
+      (click)="toggleMenu()"
+      class="block px-6 py-4 hover:bg-[#c89b3c] hover:text-black">
+
+      Home
+
+    </a>
+
+
+    <a
+      routerLink="/Shop"
+      (click)="toggleMenu()"
+      class="block px-6 py-4 hover:bg-[#c89b3c] hover:text-black">
+
+      Shop
+
+    </a>
+
+
+    <a
+      routerLink="/Brands"
+      (click)="toggleMenu()"
+      class="block px-6 py-4 hover:bg-[#c89b3c] hover:text-black">
+
+      Brands
+
+    </a>
+
+
+    <a
+      routerLink="/About"
+      (click)="toggleMenu()"
+      class="block px-6 py-4 hover:bg-[#c89b3c] hover:text-black">
+
+      About Us
+
+    </a>
+
+
+    <a
+      routerLink="/Contact"
+      (click)="toggleMenu()"
+      class="block px-6 py-4 hover:bg-[#c89b3c] hover:text-black">
+
+      Contact Us
+
+    </a>
+
+
+<!-- MOBILE PROFILE -->
+<div class="border-t border-gray-800">
+
+  <button
+    type="button"
+    (click)="toggleProfileDropdown()"
+    class="w-full flex items-center justify-between
+           px-6 py-4 hover:bg-[#c89b3c]
+           hover:text-black transition">
+
+    <span class="flex items-center gap-3">
+
+      <span
+        class="w-9 h-9 rounded-full bg-[#c89b3c]
+               text-black flex items-center justify-center
+               font-bold">
+
+        {{ userInitial }}
+
+      </span>
+
+      <span>Profile</span>
+
+    </span>
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-4 h-4 transition-transform"
+      [class.rotate-180]="isProfileDropdownOpen"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"/>
+
+    </svg>
+
+  </button>
+
+  <div
+    *ngIf="isProfileDropdownOpen"
+    class="bg-[#181818] pb-2">
+
+    <p class="px-10 py-2 text-sm text-[#c89b3c]">
+      {{ loggedInUserName }}
+    </p>
+
+    <a
+      routerLink="/MyAccount"
+      (click)="toggleMenu(); closeProfileDropdown()"
+      class="block pl-12 pr-6 py-3 text-sm
+             text-gray-300 hover:text-[#c89b3c]">
+
+      My Account
+
+    </a>
+
+    <a
+      routerLink="/OrderTracking"
+      (click)="toggleMenu(); closeProfileDropdown()"
+      class="block pl-12 pr-6 py-3 text-sm
+             text-gray-300 hover:text-[#c89b3c]">
+
+      Order Tracking
+
+    </a>
+
+    <a
+      routerLink="/Contact"
+      (click)="toggleMenu(); closeProfileDropdown()"
+      class="block pl-12 pr-6 py-3 text-sm
+             text-gray-300 hover:text-[#c89b3c]">
+
+      Contact Us
+
+    </a>
+
+    <button
+      type="button"
+      (click)="toggleMenu(); openWishlist(); closeProfileDropdown()"
+      class="w-full text-left pl-12 pr-6 py-3 text-sm
+             text-gray-300 hover:text-[#c89b3c]">
+
+      Wishlist ({{ wishlistCount }})
+
+    </button>
+
+  </div>
+
+</div>
+                        
+
+  </div>
+
+</nav>
+
+
+<!-- ===================================================== -->
+<!-- WISHLIST DRAWER -->
+<!-- ===================================================== -->
+
+<!-- BACKDROP -->
+
+<div
+  *ngIf="wishlistDrawerOpen"
+  (click)="closeWishlist()"
+  class="fixed inset-0 bg-black/60 z-[60]">
+</div>
+
+
+<!-- DRAWER -->
+
+<div
+  class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-[#111111] text-white z-[70] shadow-2xl transform transition-transform duration-300 flex flex-col"
+  [class.translate-x-0]="wishlistDrawerOpen"
+  [class.translate-x-full]="!wishlistDrawerOpen">
+
+
+  <!-- ========================= -->
+  <!-- DRAWER HEADER -->
+  <!-- ========================= -->
+
+  <div
+    class="flex items-center justify-between px-6 py-5 border-b border-gray-800">
+
+    <div>
+
+      <h2
+        class="text-xl font-serif tracking-widest">
+
+        WISHLIST
+
+      </h2>
+
+      <p
+        class="text-xs text-gray-500 mt-1">
+
+        {{ wishlistCount }}
+        {{ wishlistCount === 1 ? 'Item' : 'Items' }}
+
+      </p>
+
+    </div>
+
+
+    <!-- CLOSE BUTTON -->
+
+    <button
+      type="button"
+      (click)="closeWishlist()"
+      class="w-9 h-9 flex items-center justify-center rounded-full border border-gray-700 hover:border-[#c89b3c] hover:text-[#c89b3c] duration-300">
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"/>
+
+      </svg>
+
+    </button>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- EMPTY WISHLIST -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="wishlist.length === 0"
+    class="flex-1 flex flex-col items-center justify-center text-center px-8">
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-16 h-16 text-gray-700 mb-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+
+    </svg>
+
+
+    <h3
+      class="text-lg font-medium">
+
+      Your Wishlist is Empty
+
+    </h3>
+
+
+    <p
+      class="text-sm text-gray-500 mt-2">
+
+      Save your favourite products here.
+
+    </p>
+
+
+    <a
+      routerLink="/Shop"
+      (click)="closeWishlist()"
+      class="mt-6 px-6 py-3 bg-[#c89b3c] text-black text-sm tracking-widest uppercase hover:bg-[#d4af57] duration-300">
+
+      Continue Shopping
+
+    </a>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- WISHLIST PRODUCTS -->
+  <!-- ========================= -->
+
+  <div
+    *ngIf="wishlist.length > 0"
+    class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+
+
+    <div
+      *ngFor="let product of wishlist"
+      class="flex gap-4 p-3 bg-[#181818] border border-gray-800">
+
+
+      <!-- PRODUCT IMAGE -->
+
+      <div
+        class="w-24 h-28 bg-[#0b0b0b] flex-shrink-0 overflow-hidden">
+
+        <img
+          [src]="product.images?.[0]"
+          [alt]="product.productName"
+          class="w-full h-full object-cover">
+
+      </div>
+
+
+      <!-- PRODUCT DETAILS -->
+
+      <div
+        class="flex-1 min-w-0">
+
+        <div
+          class="flex items-start justify-between gap-2">
+
+          <div>
+
+            <p
+              class="text-[10px] text-[#c89b3c] uppercase tracking-widest">
+
+              {{ product.brand }}
+
+            </p>
+
+            <h3
+              class="text-sm font-medium mt-1 line-clamp-2">
+
+              {{ product.productName }}
+
+            </h3>
+
+          </div>
+
+
+          <!-- REMOVE -->
+
+          <button
+            type="button"
+            (click)="removeFromWishlist(product._id)"
+            class="text-gray-500 hover:text-red-500 duration-300 flex-shrink-0">
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"/>
+
+            </svg>
+
+          </button>
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div
+          class="mt-3">
+
+          <span
+            class="text-[#c89b3c] font-semibold">
+
+            ₹{{ product.discountPrice }}
+
+          </span>
+
+
+          <span
+            *ngIf="product.oldPrice"
+            class="text-xs text-gray-500 line-through ml-2">
+
+            ₹{{ product.oldPrice }}
+
+          </span>
+
+        </div>
+
+
+        <!-- VIEW PRODUCT -->
+
+        <a
+          routerLink="/Shop"
+          (click)="closeWishlist()"
+          class="inline-block mt-3 text-[10px] uppercase tracking-widest text-gray-400 hover:text-[#c89b3c] duration-300">
+
+          View Product
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

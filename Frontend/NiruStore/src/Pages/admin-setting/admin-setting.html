@@ -1,0 +1,568 @@
+
+<div class="min-h-screen bg-gray-50 p-4 sm:p-6">
+
+  <!-- PAGE HEADER -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      Settings
+    </h1>
+    <p class="mt-1 text-sm text-gray-500">
+      Manage your admin account and store settings
+    </p>
+  </div>
+
+  <!-- SUCCESS / ERROR MESSAGE -->
+  @if (message) {
+    <div
+      class="mb-5 rounded-lg border p-4 text-sm"
+      [ngClass]="messageType === 'success'
+        ? 'border-green-200 bg-green-50 text-green-700'
+        : 'border-red-200 bg-red-50 text-red-700'">
+      {{ message }}
+    </div>
+  }
+
+  <!-- TOP TABS -->
+  <div class="mb-6 overflow-x-auto rounded-xl border border-gray-200 bg-white p-2 shadow-sm">
+    <div class="flex min-w-max gap-2">
+
+      <!-- PROFILE -->
+      <button
+        type="button"
+        (click)="setActiveSection('profile')"
+        [ngClass]="activeSection === 'profile'
+          ? 'border-[#c89b3c] bg-[#c89b3c]/10 text-[#b58a32]'
+          : 'border-transparent text-gray-500 hover:bg-gray-50'"
+        class="flex items-center gap-2 rounded-lg border-b-2 px-4 py-3 text-sm font-medium transition">
+
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/>
+        </svg>
+        Profile
+      </button>
+
+      <!-- STORE -->
+      <button
+        type="button"
+        (click)="setActiveSection('store')"
+        [ngClass]="activeSection === 'store'
+          ? 'border-[#c89b3c] bg-[#c89b3c]/10 text-[#b58a32]'
+          : 'border-transparent text-gray-500 hover:bg-gray-50'"
+        class="flex items-center gap-2 rounded-lg border-b-2 px-4 py-3 text-sm font-medium transition">
+
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M9 22V12h6v10"/>
+        </svg>
+        Store Information
+      </button>
+
+      <!-- PASSWORD -->
+      <button
+        type="button"
+        (click)="setActiveSection('password')"
+        [ngClass]="activeSection === 'password'
+          ? 'border-[#c89b3c] bg-[#c89b3c]/10 text-[#b58a32]'
+          : 'border-transparent text-gray-500 hover:bg-gray-50'"
+        class="flex items-center gap-2 rounded-lg border-b-2 px-4 py-3 text-sm font-medium transition">
+
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <rect width="18" height="11" x="3" y="11" rx="2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Password
+      </button>
+
+      <!-- NOTIFICATIONS -->
+      <button
+        type="button"
+        (click)="setActiveSection('notifications')"
+        [ngClass]="activeSection === 'notifications'
+          ? 'border-[#c89b3c] bg-[#c89b3c]/10 text-[#b58a32]'
+          : 'border-transparent text-gray-500 hover:bg-gray-50'"
+        class="flex items-center gap-2 rounded-lg border-b-2 px-4 py-3 text-sm font-medium transition">
+
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M10 21h4"/>
+        </svg>
+        Notifications
+      </button>
+
+      <!-- ORDER SETTINGS -->
+      <button
+        type="button"
+        (click)="setActiveSection('orders')"
+        [ngClass]="activeSection === 'orders'
+          ? 'border-[#c89b3c] bg-[#c89b3c]/10 text-[#b58a32]'
+          : 'border-transparent text-gray-500 hover:bg-gray-50'"
+        class="flex items-center gap-2 rounded-lg border-b-2 px-4 py-3 text-sm font-medium transition">
+
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+            d="M3 3h18v18H3zM8 8h8M8 12h8M8 16h5"/>
+        </svg>
+        Order Settings
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- PROFILE SECTION -->
+  <!-- ===================================================== -->
+
+  @if (activeSection === 'profile') {
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      <div class="border-b border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-800">Admin Profile</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Update your personal account information
+        </p>
+      </div>
+
+      <!-- PROFILE AVATAR -->
+      <div class="flex items-center gap-4 border-b border-gray-100 p-6">
+        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[#c89b3c]/10 text-xl font-semibold text-[#c89b3c]">
+          {{ getInitials(admin.fullName) }}
+        </div>
+
+        <div>
+          <h3 class="text-sm font-semibold text-gray-800">
+            {{ admin.fullName || 'Administrator' }}
+          </h3>
+          <p class="mt-1 text-sm text-gray-500">
+            Administrator
+          </p>
+          <p class="mt-1 text-xs text-gray-400">
+            Profile initials are generated from your name.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-5 p-6 md:grid-cols-2">
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Full Name
+          </label>
+          <input
+            type="text"
+            name="fullName"
+            [(ngModel)]="admin.fullName"
+            required
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Email Address
+          </label>
+          <input
+            type="email"
+            name="adminEmail"
+            [(ngModel)]="admin.email"
+            required
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            name="adminPhone"
+            [(ngModel)]="admin.phone"
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Role
+          </label>
+          <input
+            type="text"
+            value="Administrator"
+            disabled
+            class="h-11 w-full rounded-lg border border-gray-200 bg-gray-50 px-4 text-sm text-gray-400"/>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end border-t border-gray-100 px-6 py-4">
+        <button
+          type="button"
+          (click)="saveChanges()"
+          class="rounded-lg bg-[#c89b3c] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#b58a32]">
+          Save Changes
+        </button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ===================================================== -->
+  <!-- STORE INFORMATION SECTION -->
+  <!-- ===================================================== -->
+
+  @if (activeSection === 'store') {
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      <div class="border-b border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-800">Store Information</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Manage your store details
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-5 p-6 md:grid-cols-2">
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Store Name
+          </label>
+          <input
+            type="text"
+            name="storeName"
+            [(ngModel)]="store.name"
+            required
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Store Email
+          </label>
+          <input
+            type="email"
+            name="storeEmail"
+            [(ngModel)]="store.email"
+            required
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Store Phone
+          </label>
+          <input
+            type="tel"
+            name="storePhone"
+            [(ngModel)]="store.phone"
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Currency
+          </label>
+          <select
+            name="currency"
+            [(ngModel)]="store.currency"
+            class="h-11 w-full rounded-lg border border-gray-200 bg-white px-4 text-sm outline-none focus:border-[#c89b3c]">
+            <option value="INR">INR - Indian Rupee</option>
+            <option value="USD">USD - US Dollar</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Store Address
+          </label>
+          <textarea
+            name="storeAddress"
+            rows="4"
+            [(ngModel)]="store.address"
+            class="w-full resize-none rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"></textarea>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end border-t border-gray-100 px-6 py-4">
+        <button
+          type="button"
+          (click)="saveChanges()"
+          class="rounded-lg bg-[#c89b3c] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#b58a32]">
+          Save Changes
+        </button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ===================================================== -->
+  <!-- PASSWORD SECTION -->
+  <!-- ===================================================== -->
+
+  @if (activeSection === 'password') {
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      <div class="border-b border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-800">Change Password</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Keep your admin account secure
+        </p>
+      </div>
+
+      <div class="max-w-xl space-y-5 p-6">
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Current Password
+          </label>
+          <input
+            type="password"
+            name="currentPassword"
+            [(ngModel)]="password.current"
+            autocomplete="current-password"
+            placeholder="Enter current password"
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            New Password
+          </label>
+          <input
+            type="password"
+            name="newPassword"
+            [(ngModel)]="password.newPassword"
+            autocomplete="new-password"
+            placeholder="Enter new password"
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Confirm New Password
+          </label>
+          <input
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="password.confirmPassword"
+            autocomplete="new-password"
+            placeholder="Confirm new password"
+            class="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#c89b3c] focus:ring-2 focus:ring-[#c89b3c]/10"/>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end border-t border-gray-100 px-6 py-4">
+        <button
+          type="button"
+          (click)="changePassword()"
+          class="rounded-lg bg-[#c89b3c] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#b58a32]">
+          Update Password
+        </button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ===================================================== -->
+  <!-- NOTIFICATIONS SECTION -->
+  <!-- ===================================================== -->
+
+  @if (activeSection === 'notifications') {
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      <div class="border-b border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-800">Notifications</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Choose which notifications you want to receive
+        </p>
+      </div>
+
+      <div class="divide-y divide-gray-100">
+
+        <!-- NEW ORDERS -->
+        <div class="flex items-center justify-between gap-4 p-6">
+          <div>
+            <h3 class="text-sm font-medium text-gray-800">New Orders</h3>
+            <p class="mt-1 text-xs text-gray-400">
+              Get notified when a new order is placed
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="notifications.newOrders"
+            aria-label="Toggle new order notifications"
+            (click)="notifications.newOrders = !notifications.newOrders"
+            [ngClass]="notifications.newOrders ? 'bg-[#c89b3c]' : 'bg-gray-200'"
+            class="relative h-6 w-11 shrink-0 rounded-full transition">
+            <span
+              [ngClass]="notifications.newOrders ? 'translate-x-5' : 'translate-x-0'"
+              class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform"></span>
+          </button>
+        </div>
+
+        <!-- LOW STOCK -->
+        <div class="flex items-center justify-between gap-4 p-6">
+          <div>
+            <h3 class="text-sm font-medium text-gray-800">Low Stock Alerts</h3>
+            <p class="mt-1 text-xs text-gray-400">
+              Get notified when products are running low
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="notifications.lowStock"
+            aria-label="Toggle low stock notifications"
+            (click)="notifications.lowStock = !notifications.lowStock"
+            [ngClass]="notifications.lowStock ? 'bg-[#c89b3c]' : 'bg-gray-200'"
+            class="relative h-6 w-11 shrink-0 rounded-full transition">
+            <span
+              [ngClass]="notifications.lowStock ? 'translate-x-5' : 'translate-x-0'"
+              class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform"></span>
+          </button>
+        </div>
+
+        <!-- CUSTOMERS -->
+        <div class="flex items-center justify-between gap-4 p-6">
+          <div>
+            <h3 class="text-sm font-medium text-gray-800">Customer Registration</h3>
+            <p class="mt-1 text-xs text-gray-400">
+              Get notified when a new customer registers
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="notifications.newCustomers"
+            aria-label="Toggle new customer notifications"
+            (click)="notifications.newCustomers = !notifications.newCustomers"
+            [ngClass]="notifications.newCustomers ? 'bg-[#c89b3c]' : 'bg-gray-200'"
+            class="relative h-6 w-11 shrink-0 rounded-full transition">
+            <span
+              [ngClass]="notifications.newCustomers ? 'translate-x-5' : 'translate-x-0'"
+              class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform"></span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end border-t border-gray-100 px-6 py-4">
+        <button
+          type="button"
+          (click)="saveChanges()"
+          class="rounded-lg bg-[#c89b3c] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#b58a32]">
+          Save Preferences
+        </button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ===================================================== -->
+  <!-- ORDER SETTINGS SECTION -->
+  <!-- ===================================================== -->
+
+  @if (activeSection === 'orders') {
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+      <div class="border-b border-gray-100 p-6">
+        <h2 class="text-lg font-semibold text-gray-800">Order Settings</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          Configure how your store handles orders
+        </p>
+      </div>
+
+      <div class="divide-y divide-gray-100">
+
+        <!-- AUTO CONFIRM -->
+        <div class="flex items-center justify-between gap-4 p-6">
+          <div>
+            <h3 class="text-sm font-medium text-gray-800">Auto Confirm Orders</h3>
+            <p class="mt-1 text-xs text-gray-400">
+              Automatically confirm new customer orders
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="orderSettings.autoConfirm"
+            aria-label="Toggle automatic order confirmation"
+            (click)="orderSettings.autoConfirm = !orderSettings.autoConfirm"
+            [ngClass]="orderSettings.autoConfirm ? 'bg-[#c89b3c]' : 'bg-gray-200'"
+            class="relative h-6 w-11 shrink-0 rounded-full transition">
+            <span
+              [ngClass]="orderSettings.autoConfirm ? 'translate-x-5' : 'translate-x-0'"
+              class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform"></span>
+          </button>
+        </div>
+
+        <!-- COD -->
+        <div class="flex items-center justify-between gap-4 p-6">
+          <div>
+            <h3 class="text-sm font-medium text-gray-800">Cash on Delivery</h3>
+            <p class="mt-1 text-xs text-gray-400">
+              Allow customers to place COD orders
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="orderSettings.cod"
+            aria-label="Toggle cash on delivery"
+            (click)="orderSettings.cod = !orderSettings.cod"
+            [ngClass]="orderSettings.cod ? 'bg-[#c89b3c]' : 'bg-gray-200'"
+            class="relative h-6 w-11 shrink-0 rounded-full transition">
+            <span
+              [ngClass]="orderSettings.cod ? 'translate-x-5' : 'translate-x-0'"
+              class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform"></span>
+          </button>
+        </div>
+
+        <!-- CANCELLATION -->
+        <div class="flex items-center justify-between gap-4 p-6">
+          <div>
+            <h3 class="text-sm font-medium text-gray-800">Allow Order Cancellation</h3>
+            <p class="mt-1 text-xs text-gray-400">
+              Allow customers to cancel pending orders
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            [attr.aria-checked]="orderSettings.allowCancellation"
+            aria-label="Toggle order cancellation"
+            (click)="orderSettings.allowCancellation = !orderSettings.allowCancellation"
+            [ngClass]="orderSettings.allowCancellation ? 'bg-[#c89b3c]' : 'bg-gray-200'"
+            class="relative h-6 w-11 shrink-0 rounded-full transition">
+            <span
+              [ngClass]="orderSettings.allowCancellation ? 'translate-x-5' : 'translate-x-0'"
+              class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform"></span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end border-t border-gray-100 px-6 py-4">
+        <button
+          type="button"
+          (click)="saveChanges()"
+          class="rounded-lg bg-[#c89b3c] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#b58a32]">
+          Save Settings
+        </button>
+      </div>
+
+    </div>
+  }
+
+</div>

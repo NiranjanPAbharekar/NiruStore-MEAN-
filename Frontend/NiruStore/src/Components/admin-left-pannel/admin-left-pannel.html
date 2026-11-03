@@ -1,0 +1,423 @@
+<!-- ========================================================= -->
+<!-- SIDEBAR -->
+<!-- ========================================================= -->
+
+<aside
+  class="fixed
+         left-0
+         top-0
+         z-50
+         h-screen
+         w-64
+         bg-[#111111]
+         text-white
+         flex
+         flex-col
+         border-r
+         border-gray-800
+         transition-transform
+         duration-300
+
+         lg:translate-x-0"
+
+  [class.-translate-x-full]="!sidebarOpen"
+
+  [class.translate-x-0]="sidebarOpen"
+>
+
+
+  <!-- ======================================================= -->
+  <!-- LOGO -->
+  <!-- ======================================================= -->
+
+  <div
+    class="h-20
+           flex
+           items-center
+           px-6
+           border-b
+           border-gray-800
+           shrink-0"
+  >
+
+    <div
+      class="flex
+             items-center
+             gap-3"
+    >
+
+      <!-- LOGO ICON -->
+
+      <div
+        class="w-10
+               h-10
+               rounded-xl
+               bg-[#c89b3c]
+               flex
+               items-center
+               justify-center
+               text-black
+               font-bold"
+      >
+        N
+      </div>
+
+
+      <!-- LOGO TEXT -->
+
+      <div>
+
+        <h2
+          class="text-lg
+                 font-bold
+                 tracking-wide"
+        >
+          NIRUSTORE
+        </h2>
+
+        <p
+          class="text-[10px]
+                 text-gray-400
+                 tracking-[3px]"
+        >
+          ADMIN PANEL
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================================= -->
+  <!-- MENU -->
+  <!-- ======================================================= -->
+
+  <nav
+    class="flex-1
+           overflow-y-auto
+           px-4
+           py-6"
+  >
+
+    <!-- DASHBOARD -->
+
+    <button routerLink="dashboard"
+      type="button"
+      (click)="setActiveMenu('Dashboard')"
+
+      class="w-full
+             flex
+             items-center
+             gap-3
+             px-4
+             py-3
+             rounded-xl
+             mb-2
+             text-sm
+             transition"
+
+      [ngClass]="
+        activeMenu === 'Dashboard'
+          ? 'bg-[#c89b3c] text-black font-semibold'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+      "
+    >
+
+      <svg
+        class="w-5 h-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          d="M3 13h8V3H3v10Zm10 8h8V3h-8v18ZM3 21h8v-6H3v6Z"
+        />
+
+      </svg>
+
+      <span>
+        Dashboard
+      </span>
+
+    </button>
+
+
+    <!-- PRODUCTS -->
+
+    <button routerLink="AdminProducts"
+      type="button"
+      (click)="setActiveMenu('Products')"
+
+      class="w-full
+             flex
+             items-center
+             gap-3
+             px-4
+             py-3
+             rounded-xl
+             mb-2
+             text-sm
+             transition"
+
+      [ngClass]="
+        activeMenu === 'Products'
+          ? 'bg-[#c89b3c] text-black font-semibold'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+      "
+    >
+
+      <svg
+        class="w-5 h-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          d="m21 8-9-5-9 5
+             9 5 9-5Zm-18 5
+             9 5 9-5M3 8v8l9 5
+             9-5V8"
+        />
+
+      </svg>
+
+      <span>
+        Products
+      </span>
+
+    </button>
+
+
+    <!-- ORDERS -->
+
+    <button routerLink="AdminOrders"
+      type="button"
+      (click)="setActiveMenu('Orders')"
+
+      class="w-full
+             flex
+             items-center
+             gap-3
+             px-4
+             py-3
+             rounded-xl
+             mb-2
+             text-sm
+             transition"
+
+      [ngClass]="
+        activeMenu === 'Orders'
+          ? 'bg-[#c89b3c] text-black font-semibold'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+      "
+    >
+
+      <svg
+        class="w-5 h-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          d="M6 2h12l2 5H4l2-5Zm-2 5h16v13H4V7Z"
+        />
+
+      </svg>
+
+      <span>
+        Orders
+      </span>
+
+    </button>
+
+
+    <!-- CUSTOMERS -->
+
+    <button routerLink="UserList"
+      type="button"
+      (click)="setActiveMenu('Customers')"
+
+      class="w-full
+             flex
+             items-center
+             gap-3
+             px-4
+             py-3
+             rounded-xl
+             mb-2
+             text-sm
+             transition"
+
+      [ngClass]="
+        activeMenu === 'Customers'
+          ? 'bg-[#c89b3c] text-black font-semibold'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+      "
+    >
+
+      <svg
+        class="w-5 h-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          d="M16 21v-2a4 4 0 0 0-4-4H6
+             a4 4 0 0 0-4 4v2
+             M9 11a4 4 0 1 0 0-8
+             4 4 0 0 0 0 8
+             M22 21v-2a4 4 0 0 0-3-3.87
+             M16 3.13a4 4 0 0 1 0 7.75"
+        />
+
+      </svg>
+
+      <span>
+        Customers
+      </span>
+
+    </button>
+
+
+
+    <!-- SETTINGS -->
+
+    <button routerLink="Setting"
+      type="button"
+      (click)="setActiveMenu('Settings')"
+
+      class="w-full
+             flex
+             items-center
+             gap-3
+             px-4
+             py-3
+             rounded-xl
+             mb-2
+             text-sm
+             transition"
+
+      [ngClass]="
+        activeMenu === 'Settings'
+          ? 'bg-[#c89b3c] text-black font-semibold'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+      "
+    >
+
+      <svg
+        class="w-5 h-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          d="M12 15.5a3.5 3.5 0 1 0 0-7
+             3.5 3.5 0 0 0 0 7Z
+             M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06
+             A1.7 1.7 0 0 0 16.16 19
+             a1.7 1.7 0 0 0-1.08 1.57V21h-2.4v-.43
+             A1.7 1.7 0 0 0 11.6 19
+             a1.7 1.7 0 0 0-1.88-.34l-.06.06-1.7-1.7.06-.06
+             A1.7 1.7 0 0 0 8.36 15
+             a1.7 1.7 0 0 0-1.57-1.08H6v-2.4h.43
+             A1.7 1.7 0 0 0 8 10.44
+             a1.7 1.7 0 0 0-.34-1.88L7.6 8.5l1.7-1.7.06.06
+             A1.7 1.7 0 0 0 11.24 7
+             a1.7 1.7 0 0 0 1.08-1.57V5h2.4v.43
+             A1.7 1.7 0 0 0 16.4 7
+             a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06
+             A1.7 1.7 0 0 0 19.64 10
+             a1.7 1.7 0 0 0 1.57 1.08H22v2.4h-.43
+             A1.7 1.7 0 0 0 19.4 15Z"
+        />
+
+      </svg>
+
+      <span>
+        Settings
+      </span>
+
+    </button>
+
+  </nav>
+
+
+  <!-- ======================================================= -->
+  <!-- LOGOUT - ALWAYS AT BOTTOM -->
+  <!-- ======================================================= -->
+
+  <div
+    class="shrink-0
+           p-4
+           border-t
+           border-gray-800
+           bg-[#111111]"
+  >
+
+    <button
+      type="button"
+      (click)="logout()"
+
+      class="w-full
+             flex
+             items-center
+             gap-3
+             px-4
+             py-3
+             rounded-xl
+             text-sm
+             text-gray-300
+             hover:bg-red-500/10
+             hover:text-red-400
+             transition"
+    >
+
+      <svg
+        class="w-5 h-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4
+             M10 17l5-5-5-5
+             M15 12H3"
+        />
+
+      </svg>
+
+      <span>
+        Logout
+      </span>
+
+    </button>
+
+  </div>
+
+</aside>

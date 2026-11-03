@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+
+/* Hide horizontal scrollbar */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+/* Text selection */
+
+::selection {
+  background: #c89b3c;
+  color: #111111;
+}
+
+
+/* Smooth images */
+
+img {
+  image-rendering: auto;
+}

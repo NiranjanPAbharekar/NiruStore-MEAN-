@@ -1,0 +1,611 @@
+
+<div class="min-h-screen bg-gray-50 px-4 sm:px-6 py-12">
+
+  <!-- ====================================== -->
+  <!-- PAGE HEADING -->
+  <!-- ====================================== -->
+
+  <div class="text-center mb-14">
+    <span class="text-sm font-semibold uppercase tracking-[0.3em] text-[#b5872f]">
+      NiruStore Collection
+    </span>
+
+    <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3">
+      Our Brands
+    </h1>
+
+    <p class="text-gray-500 mt-3">
+      Discover premium brands available at NiruStore.
+    </p>
+  </div>
+
+
+  <!-- ====================================== -->
+  <!-- BRANDS GRID -->
+  <!-- ====================================== -->
+
+  <div class="max-w-7xl mx-auto">
+
+    <div *ngIf="brandsLoading" class="text-center py-16 text-gray-500">
+      Loading brands...
+    </div>
+
+    <div *ngIf="brandsError && !brandsLoading" class="text-center py-10">
+
+      <p class="text-red-500 mb-4">
+        {{ brandsError }}
+      </p>
+
+      <button
+        type="button"
+        (click)="loadBrands()"
+        class="rounded-full bg-[#c89b3c] px-6 py-2.5 text-white hover:bg-[#b5872f]">
+        Try Again
+      </button>
+
+    </div>
+
+    <div
+      *ngIf="!brandsLoading && !brandsError && brands.length > 0"
+      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-7">
+
+      <div
+        *ngFor="let brand of brands"
+        class="group bg-white rounded-2xl border border-gray-100
+               shadow-sm hover:shadow-xl hover:-translate-y-1
+               transition-all duration-300 p-6
+               flex items-center justify-center min-h-[150px]">
+
+        <img
+          [src]="brand.image || fallbackImage"
+          [alt]="brand.name"
+          (error)="onBrandImageError($event)"
+          loading="lazy"
+          class="max-w-full w-32 h-24 object-contain
+                 transition-transform duration-300
+                 group-hover:scale-110">
+
+      </div>
+
+    </div>
+
+    <div
+      *ngIf="!brandsLoading && !brandsError && brands.length === 0"
+      class="text-center py-12 text-gray-500">
+
+      No brands available currently.
+
+    </div>
+
+  </div>
+
+
+  <!-- ====================================== -->
+  <!-- CUSTOMER REVIEWS -->
+  <!-- ====================================== -->
+
+  <section class="max-w-7xl mx-auto pt-24 pb-16">
+
+    <!-- SECTION HEADING -->
+    <div class="text-center mb-12">
+
+      <span class="text-sm font-semibold uppercase tracking-[0.3em] text-[#b5872f]">
+        Testimonials
+      </span>
+
+      <h2 class="text-3xl sm:text-5xl font-bold text-gray-900 mt-3">
+        What Our Customers Say
+      </h2>
+
+      <p class="text-gray-500 mt-4 max-w-xl mx-auto">
+        Real experiences from customers who shop with NiruStore.
+      </p>
+
+      <div class="w-16 h-1 bg-[#c89b3c] rounded-full mx-auto mt-6"></div>
+
+    </div>
+
+
+    <!-- LOADING -->
+    <div
+      *ngIf="reviewsLoading"
+      class="text-center py-16 text-gray-500">
+
+      Loading customer reviews...
+
+    </div>
+
+
+    <!-- ERROR -->
+    <div
+      *ngIf="reviewsError && !reviewsLoading"
+      class="text-center py-12">
+
+      <p class="text-red-500 mb-4">
+        {{ reviewsError }}
+      </p>
+
+      <button
+        type="button"
+        (click)="loadReviews()"
+        class="rounded-full bg-[#c89b3c] px-6 py-2.5 text-white">
+
+        Try Again
+
+      </button>
+
+    </div>
+
+
+    <!-- EMPTY REVIEWS -->
+    <div
+      *ngIf="!reviewsLoading && !reviewsError && testimonials.length === 0"
+      class="text-center py-16 bg-white rounded-3xl border border-gray-100">
+
+      <div class="text-5xl mb-4">💬</div>
+
+      <h3 class="text-xl font-semibold text-gray-800">
+        No reviews yet
+      </h3>
+
+      <p class="text-gray-500 mt-2">
+        Be the first to share your shopping experience!
+      </p>
+
+    </div>
+
+
+    <!-- ====================================== -->
+    <!-- REVIEW CAROUSEL -->
+    <!-- ====================================== -->
+
+    <div
+      *ngIf="!reviewsLoading && !reviewsError && testimonials.length > 0"
+      class="review-carousel-wrapper"
+      >
+
+
+      <!-- PREVIOUS ARROW -->
+      <!-- <button
+        *ngIf="showCarouselArrows"
+        type="button"
+        class="review-arrow review-arrow-left"
+        (click)="previousReview()"
+        aria-label="Previous review">
+
+       
+      </button> -->
+
+      <button
+  *ngIf="showCarouselArrows"
+  type="button"
+  (click)="previousReview()"
+  [disabled]="!canGoPrevious"
+  aria-label="Previous review"
+  class="review-arrow review-arrow-left"
+  [class.disabled]="!canGoPrevious">
+
+   
+  <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+
+          <path d="m15 18-6-6 6-6"/>
+
+        </svg>
+
+
+
+</button>
+
+
+      <!-- VIEWPORT -->
+      <div
+        #carouselViewport
+        class="review-carousel-viewport">
+
+        <!-- TRACK -->
+        <div
+          #carouselTrack
+          class="review-carousel-track"
+          [style.transform]="'translate3d(-' + trackOffset + 'px, 0, 0)'">
+
+
+          <!-- REVIEW CARD -->
+          <article
+            *ngFor="let item of testimonials"
+            class="review-slide"
+            [style.flex]="getCardFlex()">
+
+            <div class="review-card">
+
+              <!-- REVIEW CONTENT -->
+              <div class="review-main-content">
+
+                <div class="review-card-header">
+
+                  <div class="review-quote">
+                    “
+                  </div>
+
+                  <span
+                    *ngIf="item.recommend"
+                    class="review-recommended">
+
+                    Recommended
+
+                  </span>
+
+                </div>
+
+
+                <!-- RATING -->
+                <div class="review-stars">
+
+                  <span *ngFor="let star of [1,2,3,4,5]">
+                    {{ star <= item.rating ? '★' : '☆' }}
+                  </span>
+
+                </div>
+
+
+                <!-- REVIEW TEXT -->
+                <p class="review-text">
+                  {{ item.review }}
+                </p>
+
+              </div>
+
+
+              <!-- CUSTOMER INFORMATION -->
+              <div class="review-customer">
+
+                <div class="review-customer-info">
+
+                  <div class="review-avatar">
+
+                    {{
+                      item.name
+                        ? item.name.charAt(0).toUpperCase()
+                        : 'C'
+                    }}
+
+                  </div>
+
+                  <div class="review-customer-name">
+
+                    <h3>
+                      {{ item.name }}
+                    </h3>
+
+                    <p>
+                      {{ item.brand }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <!-- DATE -->
+                <p
+                  *ngIf="item.createdAt"
+                  class="review-date">
+
+                  <!-- {{ item.createdAt | date:'dd MMM yyyy' }} -->
+                    {{ item.createdAt ? (item.createdAt | date:'dd MMM yyyy') : 'Date unavailable' }}
+                </p>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+
+      <!-- NEXT ARROW -->
+      <!-- <button
+        *ngIf="showCarouselArrows"
+        type="button"
+        class="review-arrow review-arrow-right"
+        (click)="nextReview()"
+        aria-label="Next review">
+
+       
+
+      </button> -->
+
+
+      <button
+  *ngIf="showCarouselArrows"
+  type="button"
+  (click)="nextReview()"
+  [disabled]="!canGoNext"
+  aria-label="Next review"
+  class="review-arrow review-arrow-right"
+  [class.disabled]="!canGoNext">
+
+   <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+
+          <path d="m9 18 6-6-6-6"/>
+
+        </svg>
+
+</button>
+
+    </div>
+
+
+    <!-- ====================================== -->
+    <!-- CAROUSEL PAGINATION -->
+    <!-- ====================================== -->
+
+    <div
+      *ngIf="showCarouselArrows"
+      class="review-carousel-pagination">
+
+      <p class="review-counter">
+
+        {{ currentReviewIndex + 1 }} -
+        {{ lastVisibleReview }} of
+        {{ testimonials.length }} reviews
+
+      </p>
+
+      <div class="review-dots">
+
+        <button
+          *ngFor="let dot of reviewDots; let i = index"
+          type="button"
+          (click)="goToReview(i)"
+          [attr.aria-label]="'Go to review position ' + (i + 1)"
+          [class.active]="currentReviewIndex === i"
+          class="review-dot">
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ====================================== -->
+  <!-- SHARE YOUR EXPERIENCE -->
+  <!-- ====================================== -->
+
+  <section
+    class="max-w-4xl mx-auto my-16 bg-white rounded-3xl
+           border border-gray-100
+           shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+           p-6 sm:p-10">
+
+
+    <!-- FORM HEADING -->
+    <div class="text-center mb-9">
+
+      <span class="text-sm font-semibold uppercase tracking-[0.3em] text-[#b5872f]">
+        Your Feedback Matters
+      </span>
+
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mt-3">
+        Share Your Experience
+      </h2>
+
+      <p class="text-gray-500 mt-3">
+        We'd love to hear about your shopping experience.
+      </p>
+
+    </div>
+
+
+    <!-- REVIEW FORM -->
+    <form
+      #reviewNgForm="ngForm"
+      (ngSubmit)="submitReview()"
+      class="space-y-6">
+
+
+      <!-- NAME -->
+      <div>
+
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Full Name
+        </label>
+
+        <input
+          type="text"
+          name="name"
+          [(ngModel)]="reviewForm.name"
+          required
+          minlength="2"
+          placeholder="Enter your name"
+          class="w-full rounded-xl border border-gray-200
+                 px-4 py-3 outline-none
+                 focus:border-[#c89b3c]
+                 focus:ring-2 focus:ring-[#c89b3c]/20">
+
+      </div>
+
+
+      <!-- EMAIL -->
+      <div>
+
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Email Address
+        </label>
+
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="reviewForm.email"
+          required
+          email
+          placeholder="Enter your email"
+          class="w-full rounded-xl border border-gray-200
+                 px-4 py-3 outline-none
+                 focus:border-[#c89b3c]
+                 focus:ring-2 focus:ring-[#c89b3c]/20">
+
+      </div>
+
+
+      <!-- BRAND -->
+      <div>
+
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Brand Purchased
+        </label>
+
+        <select
+          name="brand"
+          [(ngModel)]="reviewForm.brand"
+          required
+          class="w-full rounded-xl border border-gray-200
+                 px-4 py-3 outline-none bg-white
+                 focus:border-[#c89b3c]
+                 focus:ring-2 focus:ring-[#c89b3c]/20">
+
+          <option value="">
+            Select Brand
+          </option>
+
+          <option
+            *ngFor="let brand of brands"
+            [value]="brand.name">
+
+            {{ brand.name }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- RATING -->
+      <div>
+
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Rating
+        </label>
+
+        <select
+          name="rating"
+          [(ngModel)]="reviewForm.rating"
+          required
+          class="w-full rounded-xl border border-gray-200
+                 px-4 py-3 outline-none bg-white
+                 focus:border-[#c89b3c]
+                 focus:ring-2 focus:ring-[#c89b3c]/20">
+
+          <option [ngValue]="5">★★★★★ Excellent</option>
+          <option [ngValue]="4">★★★★ Very Good</option>
+          <option [ngValue]="3">★★★ Good</option>
+          <option [ngValue]="2">★★ Average</option>
+          <option [ngValue]="1">★ Poor</option>
+
+        </select>
+
+      </div>
+
+
+      <!-- REVIEW -->
+      <div>
+
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Your Experience
+        </label>
+
+        <textarea
+          name="review"
+          [(ngModel)]="reviewForm.review"
+          required
+          minlength="5"
+          rows="5"
+          placeholder="Tell us about your shopping experience..."
+          class="w-full rounded-xl border border-gray-200
+                 px-4 py-3 outline-none resize-none
+                 focus:border-[#c89b3c]
+                 focus:ring-2 focus:ring-[#c89b3c]/20">
+        </textarea>
+
+      </div>
+
+
+      <!-- RECOMMEND -->
+     <label class="flex items-center gap-3 text-sm text-gray-600">
+
+  <input
+    type="checkbox"
+    name="recommend"
+    [(ngModel)]="reviewForm.recommend"
+    [ngModelOptions]="{ standalone: true }"
+    class="w-5 h-5 accent-[#c89b3c]">
+
+  I would recommend NiruStore to my friends and family.
+
+</label>
+
+
+      <!-- SUCCESS MESSAGE -->
+      <div
+        *ngIf="reviewSuccess"
+        class="rounded-xl bg-green-50 border border-green-100
+               text-green-700 p-4 text-sm">
+
+        {{ reviewSuccess }}
+
+      </div>
+
+
+      <!-- ERROR MESSAGE -->
+      <div
+        *ngIf="reviewSubmitError"
+        class="rounded-xl bg-red-50 border border-red-100
+               text-red-700 p-4 text-sm">
+
+        {{ reviewSubmitError }}
+
+      </div>
+
+
+      <!-- SUBMIT BUTTON -->
+  <button
+  type="submit"
+  [disabled]="reviewSubmitting || reviewNgForm.invalid"
+  class="w-full rounded-xl bg-[#c89b3c]
+         hover:bg-[#b5872f]
+         disabled:opacity-50 disabled:cursor-not-allowed
+         text-white font-semibold py-3.5
+         shadow-lg shadow-[#c89b3c]/20
+         transition-all duration-300">
+
+  {{
+    reviewSubmitting
+      ? 'Submitting Review...'
+      : 'Submit Review'
+  }}
+
+</button>
+
+    </form>
+
+  </section>
+
+</div>

@@ -1,0 +1,60 @@
+/* ========================================================= */
+/* LUXURY CAROUSEL */
+/* ========================================================= */
+
+.luxury-slide {
+  opacity: 0;
+
+  animation-name: luxuryCarousel;
+  animation-duration: 25s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+
+  animation-fill-mode: both;
+}
+
+
+/* ========================================================= */
+/* CAROUSEL ANIMATION */
+/* ========================================================= */
+
+@keyframes luxuryCarousel {
+
+  /* Hidden */
+
+  0% {
+    opacity: 0;
+  }
+
+
+  /* Fade in */
+
+  4% {
+    opacity: 1;
+  }
+
+
+  /* Stay visible */
+
+  16% {
+    opacity: 1;
+  }
+
+
+  /* Fade out */
+
+  20% {
+    opacity: 0;
+  }
+
+
+  /* Hidden until next cycle */
+
+  100% {
+    opacity: 0;
+  }
+
+}
+:host {
+  display: block;
+}
