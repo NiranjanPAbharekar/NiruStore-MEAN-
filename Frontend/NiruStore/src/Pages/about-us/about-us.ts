@@ -203,6 +203,7 @@ loadBrands(): void {
   // =====================================
 
 
+
 getImageUrl(image?: string): string {
 
   if (!image || !image.trim()) {
@@ -220,10 +221,11 @@ getImageUrl(image?: string): string {
     return path;
   }
 
-  // Relative image path
-  return `http://localhost:4200/${path.replace(/^\/+/, '')}`;
+  // Relative image path - works locally and on Netlify
+  return `/${path.replace(/^\/+/, '')}`;
 
 }
+
 
 
   // =====================================
