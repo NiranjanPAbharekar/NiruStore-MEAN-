@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
 import User from './model/user.js';
 import Product from './model/Product.js';
 import orderRoutes from './Routes/orderRoutes.js';
-import userRoute from './Routes/userRoute.js' ;
+import userRoute from './Routes/userRoute.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
@@ -17,7 +17,7 @@ import AdminAuth from './Routes/AdminAuth.js';
 import { requireAdmin } from './Middelware/requireAdmin.js';
 import AllBrand from './Routes/AllBrand.js';
 import AllReview from './Routes/AllReview.js';
-import dns from 'node:dns'
+import dns from 'node:dns';
 
 dotenv.config();
 
@@ -25,15 +25,30 @@ const app = express();
 
 const PORT = process.env.PORT || 8040;
 const MONGODB_URL = process.env.MongoDB_URL;
+
+// =====================================================
+// DNS CONFIGURATION
+// =====================================================
+
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
+// =====================================================
+// CORS CONFIGURATION
+// =====================================================
 
-// =====================================================
-// MIDDLEWARE
-// =====================================================
+const allowedOrigins = [
+  'http://localhost:4200',
+  'https://astonishing-platypus-78395b.netlify.app'
+];
 
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+  },
   methods: [
     'GET',
     'POST',
@@ -48,12 +63,15 @@ app.use(cors({
   ]
 }));
 
+// =====================================================
+// MIDDLEWARE
+// =====================================================
+
 app.use(express.json());
 
 app.use(express.urlencoded({
   extended: true
 }));
-
 
 // =====================================================
 // ORDER ROUTES
@@ -65,7 +83,6 @@ app.use('/api/users', userRoute);
 app.use('/api/admin', AdminAuth);
 app.use('/api/Brands', AllBrand);
 app.use('/api/Reviews', AllReview);
-
 
 // =====================================================
 // GET TOTAL REGISTERED USERS — ADMIN DASHBOARD
@@ -90,7 +107,6 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-
 // =====================================================
 // TEST ROUTE
 // =====================================================
@@ -98,7 +114,6 @@ app.get('/api/users', async (req, res) => {
 app.get('/', (req, res) => {
   res.send('NiruStore Ecommerce Backend is Running 🚀');
 });
-
 
 // =====================================================
 // API TEST
@@ -110,7 +125,6 @@ app.get('/api/test', (req, res) => {
     message: 'API is working'
   });
 });
-
 
 // =====================================================
 // REGISTER
@@ -172,7 +186,6 @@ app.post('/api/register', async (req, res) => {
     const newUser = new User({
       name: fullName.trim(),
       email: normalizedEmail,
-      
       password: hashedPassword,
       confirmpassword: hashedPassword,
       terms: acceptTerms
@@ -194,7 +207,6 @@ app.post('/api/register', async (req, res) => {
     });
   }
 });
-
 
 // =====================================================
 // LOGIN — GENERATE JWT TOKEN
@@ -274,7 +286,6 @@ app.post('/api/login', async (req, res) => {
     });
   }
 });
-
 
 // =====================================================
 // FORGOT PASSWORD — SEND RESET EMAIL
@@ -375,7 +386,6 @@ app.post('/api/forgot-password', async (req, res) => {
   }
 });
 
-
 // =====================================================
 // RESET PASSWORD — VERIFY TOKEN AND SAVE NEW PASSWORD
 // =====================================================
@@ -444,7 +454,6 @@ app.post('/api/reset-password', async (req, res) => {
   }
 });
 
-
 // =====================================================
 // AUTHENTICATION MIDDLEWARE
 // =====================================================
@@ -497,7 +506,6 @@ function authenticateToken(req, res, next) {
   }
 }
 
-
 // =====================================================
 // NORMALIZE HOME CATEGORY
 // =====================================================
@@ -543,7 +551,6 @@ function normalizeHomeCategory(value) {
 
   return aliases[category] || category;
 }
-
 
 // =====================================================
 // HOME PAGE CONTENT
@@ -601,7 +608,6 @@ app.get('/api/home-content', async (req, res) => {
     });
   }
 });
-
 
 // =====================================================
 // CHANGE PASSWORD
@@ -683,7 +689,6 @@ app.post(
   }
 );
 
-
 // =====================================================
 // GET ALL PRODUCTS
 // =====================================================
@@ -709,7 +714,6 @@ app.get('/Admin/AdminProducts', async (req, res) => {
     });
   }
 });
-
 
 // =====================================================
 // ADD PRODUCT
@@ -776,7 +780,6 @@ app.post('/Admin/AdminProducts', async (req, res) => {
   }
 });
 
-
 // =====================================================
 // UPDATE PRODUCT
 // =====================================================
@@ -818,7 +821,6 @@ app.put('/Admin/AdminProducts/:id', async (req, res) => {
   }
 });
 
-
 // =====================================================
 // DELETE PRODUCT
 // =====================================================
@@ -851,7 +853,6 @@ app.delete('/Admin/AdminProducts/:id', async (req, res) => {
     });
   }
 });
-
 
 // =====================================================
 // MONGODB + SERVER
