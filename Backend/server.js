@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 
 import User from './model/user.js';
 import Product from './model/Product.js';
-import orderRoutes from './Routes/OrderRoutes.js';
+import orderRoutes from './Routes/orderRoutes.js';
 import userRoute from './Routes/userRoute.js' ;
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
@@ -17,6 +17,7 @@ import AdminAuth from './Routes/AdminAuth.js';
 import { requireAdmin } from './Middelware/requireAdmin.js';
 import AllBrand from './Routes/AllBrand.js';
 import AllReview from './Routes/AllReview.js';
+import dns from 'node:dns'
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ const app = express();
 
 const PORT = process.env.PORT || 8040;
 const MONGODB_URL = process.env.MongoDB_URL;
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 
 // =====================================================
