@@ -234,15 +234,27 @@ export class Brands implements OnInit, AfterViewInit, OnDestroy {
   // BRAND IMAGE URL
   // =====================================
 
+
 getImageUrl(image?: string): string {
 
-  if (!image?.trim()) {
+  if (!image || !image.trim()) {
     return this.fallbackImage;
   }
 
   const path = image.trim();
 
-  // Already an absolute URL or Base64 image.
+  // Fix old localhost image URLs saved in MongoDB
+  if (
+    path.startsWith('http://localhost:4200/') ||
+    path.startsWith('https://localhost:4200/')
+  ) {
+    return path.replace(
+      /^https?:\/\/localhost:4200\//,
+      '/'
+    );
+  }
+
+  // Preserve other complete image URLs
   if (
     path.startsWith('http://') ||
     path.startsWith('https://') ||
@@ -251,9 +263,10 @@ getImageUrl(image?: string): string {
     return path;
   }
 
-  // Local Angular public asset.
+  // Relative image path
   return `/${path.replace(/^\/+/, '')}`;
 }
+
   onBrandImageError(event: Event): void {
   const img = event.target as HTMLImageElement;
 
