@@ -44,7 +44,7 @@ export class AdminOrder implements OnInit {
   // API
   // =====================================================
 
-  private readonly ordersApiUrl = 'http://localhost:8040/order';
+  private readonly ordersApiUrl = 'https://nirustore-mean-1.onrender.com/order';
 
 
   // =====================================================

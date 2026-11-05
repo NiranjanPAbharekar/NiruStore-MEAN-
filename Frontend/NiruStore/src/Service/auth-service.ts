@@ -42,7 +42,7 @@ export interface LoginResponse {
 })
 export class AuthService {
 
-  private url = 'http://localhost:8040/api';
+  private url = 'https://nirustore-mean-1.onrender.com/api';
 
 
   constructor(

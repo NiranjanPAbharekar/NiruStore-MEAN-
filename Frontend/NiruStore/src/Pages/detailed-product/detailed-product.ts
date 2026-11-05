@@ -46,7 +46,7 @@ interface Product {
 })
 export class DetailedProduct {
     private apiUrl =
-    'http://localhost:8040/Admin/AdminProducts';
+    'https://nirustore-mean-1.onrender.com/Admin/AdminProducts';
 
   products: Product[] = [];
   product: Product | null = null;

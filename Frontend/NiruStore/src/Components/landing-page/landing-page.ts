@@ -70,7 +70,7 @@ export class LandingPage implements OnInit, OnDestroy {
   // =========================================================
 
   private readonly productsApiUrl =
-    'http://localhost:8040/Admin/AdminProducts';
+    'https://nirustore-mean-1.onrender.com/Admin/AdminProducts';
 
   // =========================================================
   // TIMER AND SUBSCRIPTIONS

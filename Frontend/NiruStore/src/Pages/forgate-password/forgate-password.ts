@@ -58,7 +58,7 @@ changePassword() {
   this.passwordChanged = false;
 
   this.http.post(
-    'http://localhost:8040/api/forgot-password',
+    'https://nirustore-mean-1.onrender.com/api/forgot-password',
     { email: this.email.trim().toLowerCase() }
   ).subscribe({
     next: (response: any) => {

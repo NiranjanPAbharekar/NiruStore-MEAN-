@@ -65,10 +65,10 @@ interface ReviewForm {
 export class Brands implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly brandsApi =
-    'http://localhost:8040/api/Brands';
+    'https://nirustore-mean-1.onrender.com/api/Brands';
 
   private readonly reviewsApi =
-    'http://localhost:8040/api/Reviews';
+    'https://nirustore-mean-1.onrender.com/api/Reviews';
 
   // =====================================
   // CAROUSEL ELEMENTS

@@ -67,7 +67,7 @@ export class ResetPassword {
     this.loading = true;
 
     this.http.post<any>(
-      'http://localhost:8040/api/reset-password',
+      'https://nirustore-mean-1.onrender.com/api/reset-password',
       {
         token: this.token,
         newPassword: this.newPassword

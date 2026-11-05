@@ -376,7 +376,7 @@ changePassword(): void {
   };
 
   this.http.post(
-    'http://localhost:8040/api/change-password',
+    'https://nirustore-mean-1.onrender.com/api/change-password',
     payload,
     {
       headers: {

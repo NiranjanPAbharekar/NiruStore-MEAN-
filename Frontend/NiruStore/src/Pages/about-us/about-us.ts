@@ -56,7 +56,7 @@ interface Timeline {
 export class AboutUs implements OnInit {
 
   private readonly brandsApi =
-    'http://localhost:8040/api/Brands';
+    'https://nirustore-mean-1.onrender.com/api/Brands';
 
   constructor(
     private http: HttpClient,

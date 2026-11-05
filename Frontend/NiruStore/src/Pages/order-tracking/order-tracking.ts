@@ -109,7 +109,7 @@ export class OrderTracking implements OnInit {
   // API URL
   // =======================================================
 
-  private readonly API_URL = 'http://localhost:8040/order';
+  private readonly API_URL = 'https://nirustore-mean-1.onrender.com/order';
 
   // =======================================================
   // COMPONENT PROPERTIES

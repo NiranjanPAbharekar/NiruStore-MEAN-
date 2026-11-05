@@ -33,7 +33,7 @@ export interface HomeContentResponse {
 })
 export class HomeContent {
       private readonly apiUrl =
-    'http://localhost:8040/api/home-content';
+    'https://nirustore-mean-1.onrender.com/api/home-content';
 
   constructor(private http: HttpClient) {}
 

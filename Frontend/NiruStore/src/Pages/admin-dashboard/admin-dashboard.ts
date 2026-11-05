@@ -75,14 +75,14 @@ export class AdminDashboard implements OnInit, OnDestroy {
   // =====================================================
 
   private readonly productsApiUrl =
-    'http://localhost:8040/Admin/AdminProducts';
+    'https://nirustore-mean-1.onrender.com/Admin/AdminProducts';
 
   // Change these URLs if your backend uses different routes.
 private readonly ordersApiUrl =
-  'http://localhost:8040/order';
+  'https://nirustore-mean-1.onrender.com/order';
 
   private readonly usersApiUrl =
-    'http://localhost:8040/api/users';
+    'https://nirustore-mean-1.onrender.com/api/users';
 
   // =====================================================
   // DASHBOARD STATE

@@ -60,7 +60,7 @@ export class AdminProduct implements OnInit {
   // =====================================================
 
   private readonly apiUrl =
-    'http://localhost:8040/Admin/AdminProducts';
+    'https://nirustore-mean-1.onrender.com/Admin/AdminProducts';
 
   // =====================================================
   // FORM AND PRODUCT DATA

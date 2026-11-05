@@ -85,7 +85,7 @@ export class Checkout implements OnInit {
   // BACKEND API
   // ==========================================
 
-  private readonly API_URL = 'http://localhost:8040/order';
+  private readonly API_URL = 'https://nirustore-mean-1.onrender.com/order';
 
   // ==========================================
   // CART
@@ -539,7 +539,7 @@ placeOrder(formValid: boolean): void {
   console.log('5. Sending POST request:', orderData);
 
   this.http.post<any>(
-    'http://localhost:8040/order',
+    'https://nirustore-mean-1.onrender.com/order',
     orderData
   ).pipe(
     timeout(15000),

@@ -81,7 +81,7 @@ export class Products implements OnInit {
   isFilterDrawerOpen = false;
 
   private apiUrl =
-    'http://localhost:8040/Admin/AdminProducts';
+    'https://nirustore-mean-1.onrender.com/Admin/AdminProducts';
 
   loading = false;
 

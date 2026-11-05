@@ -30,7 +30,7 @@ interface UsersApiResponse {
 })
 export class UserListComponent implements OnInit {
 
-  private readonly apiUrl = 'http://localhost:8040/api/users';
+  private readonly apiUrl = 'https://nirustore-mean-1.onrender.com/api/users';
 
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -64,7 +64,7 @@ loadUsers(): void {
   this.errorMessage = '';
 
   this.http.get<UsersApiResponse>(
-    'http://localhost:8040/api/users'
+    'https://nirustore-mean-1.onrender.com/api/users'
   ).subscribe({
     next: (response) => {
       console.log('API response received:', response);

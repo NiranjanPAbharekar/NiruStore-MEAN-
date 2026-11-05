@@ -1,0 +1,5 @@
+
+[build]
+  base = "Frontend/NiruStore"
+  command = "npm run build"
+  publish = "dist/NiruStore"

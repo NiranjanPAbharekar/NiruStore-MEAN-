@@ -21,7 +21,7 @@ export interface AdminLoginResponse {
   providedIn: 'root'
 })
 export class AdminLogins {
-  private readonly apiUrl = 'http://localhost:8040/api/admin';
+  private readonly apiUrl = 'https://nirustore-mean-1.onrender.com/api/admin';
 
   private readonly tokenKey = 'niruStoreAdminToken';
   private readonly adminKey = 'niruStoreAdminUser';
