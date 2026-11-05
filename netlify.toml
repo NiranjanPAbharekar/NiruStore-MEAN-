@@ -3,3 +3,8 @@
   base = "Frontend/NiruStore"
   command = "npm run build"
   publish = "dist/NiruStore/browser"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
